@@ -10,3 +10,9 @@ This application is designed for **students and professionals** who need a struc
 Tracking job applications can be overwhelming. Many job seekers tend to rely on confirmation emails or Word/Excel documents, but these methods lack **consistency, automation, and intelligence**. 
 
 **SmartJobTracker** eliminates these inefficiencies by providing a **centralized, time-sensitive, and intelligent tracking system** to help users manage their applications effectively.  
+
+## **User Stories**
+- As a user, I want to be able to add a new job application to my job tracking list.  
+- As a user, I want to be able to view all job applications in a list and filter them based on specific criteria.  
+- As a user, I want to be able to update the status of a job application as my application progresses.  
+- As a user, I want to be able to delete a job application that I no longer want to track.  
