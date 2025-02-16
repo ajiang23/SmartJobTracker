@@ -27,49 +27,49 @@ public class JobApplication {
 
     // MODIFIES: this
     // EFFECTS: update companyName to given input
-    public void setCompanyName() {
+    public void setCompanyName(String newName) {
         // stub
     }
 
     // MODIFIES: this
     // EFFECTS: update jobTitle to given input
-    public void setJobTitle() {
+    public void setJobTitle(String newTitle) {
         // stub
     }
 
     // MODIFIES: this
     // EFFECTS: update appliedDate to given input
-    public void setAppliedDate() {
+    public void setAppliedDate(LocalDate newDate) {
         // stub
     }
 
     // MODIFIES: this
     // EFFECTS: update status to given input
-    public void setStatus() {
+    public void setStatus(JobStatus newStatus) {
         // stub
     }
 
     // MODIFIES: this
     // EFFECTS: update resume to given input
-    public void setResume() {
+    public void setResume(File newResume) {
         // stub
     }
 
     // MODIFIES: this
     // EFFECTS: update coverLetter to given input
-    public void setCoverLetter() {
+    public void setCoverLetter(File newCoverLetter) {
         // stub
     }
 
     // MODIFIES: this
     // EFFECTS: update postingURL to given input
-    public void setPostingURL() {
+    public void setPostingURL(String newURL) {
         // stub
     }
 
     // MODIFIES: this
     // EFFECTS: update notes to given input
-    public void setNotes() {
+    public void setNotes(String newNotes) {
         // stub
     }
 
