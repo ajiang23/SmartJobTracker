@@ -22,95 +22,102 @@ public class JobApplication {
     // title,
     // applied date, uploaded resume and cached job posting
     public JobApplication(String companyName, String jobTitle, LocalDate appliedDate, File resume, String postingURL) {
-        // stub
+        this.companyName = companyName;
+        this.jobTitle = jobTitle;
+        this.appliedDate = appliedDate;
+        this.resume = resume; 
+        this.postingURL = postingURL;
+        this.coverLetter = null; 
+        this.notes = null;
+        this.status = JobStatus.Applied;
     }
 
     // MODIFIES: this
     // EFFECTS: update companyName to given input
     public void setCompanyName(String newName) {
-        // stub
+        this.companyName = newName;
     }
 
     // MODIFIES: this
     // EFFECTS: update jobTitle to given input
     public void setJobTitle(String newTitle) {
-        // stub
+        this.jobTitle = newTitle;
     }
 
     // MODIFIES: this
     // EFFECTS: update appliedDate to given input
     public void setAppliedDate(LocalDate newDate) {
-        // stub
+        this.appliedDate = newDate;
     }
 
     // MODIFIES: this
     // EFFECTS: update status to given input
     public void setStatus(JobStatus newStatus) {
-        // stub
+        this.status = newStatus;
     }
 
     // MODIFIES: this
     // EFFECTS: update resume to given input
     public void setResume(File newResume) {
-        // stub
+        this.resume = newResume;
     }
 
     // MODIFIES: this
     // EFFECTS: update coverLetter to given input
     public void setCoverLetter(File newCoverLetter) {
-        // stub
+        this.coverLetter = newCoverLetter;
     }
 
     // MODIFIES: this
     // EFFECTS: update postingURL to given input
     public void setPostingURL(String newURL) {
-        // stub
+        this.postingURL = newURL;
     }
 
     // MODIFIES: this
     // EFFECTS: update notes to given input
     public void setNotes(String newNotes) {
-        // stub
+        this.notes = newNotes;
     }
 
     // EFFECTS: get this job application's companyName
-    public void getCompanyName() {
-        // stub
+    public String getCompanyName() {
+        return this.companyName;
     }
 
     // EFFECTS: get this job application's jobTitle
-    public void getJobTitle() {
-        // stub
+    public String getJobTitle() {
+        return jobTitle;
     }
 
     // EFFECTS: get this job application's appliedDate
-    public void getAppliedDate() {
-        // stub
+    public LocalDate getAppliedDate() {
+        return appliedDate;
     }
 
     // EFFECTS: get this job application's status
-    public void getStatus() {
-        // stub
+    public JobStatus getStatus() {
+        return status;
     }
 
     // EFFECTS: get this job application's resume
-    public void getResume() {
-        // stub
+    public File getResume() {
+        return resume;
     }
 
     // EFFECTS: get this job application's coverLetter
-    public void getCoverLetter() {
-        // stub
+    public File getCoverLetter() {
+        return coverLetter;
     }
 
     // EFFECTS: get this job application's postingURL
-    public void getPostingURL() {
-        // stub
+    public String getPostingURL() {
+        return postingURL;
     }
 
     // EFFECTS: get this job application's notes
-    public void getNotes() {
-        // stub
+    public String getNotes() {
+        return notes;
     }
 
 }
