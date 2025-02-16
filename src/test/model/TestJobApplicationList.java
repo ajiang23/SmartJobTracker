@@ -39,11 +39,11 @@ public class TestJobApplicationList {
         testList.addJob(jp1);
         assertEquals(1, testList.getList().size());
         assertEquals(jp1, testList.getList().get(0));
-        testList.getList().add(jp2);
+        testList.addJob(jp2);
         assertEquals(2, testList.getList().size());
         assertEquals(jp1, testList.getList().get(0));
         assertEquals(jp2, testList.getList().get(1));
-        testList.getList().add(jp3);
+        testList.addJob(jp3);
         assertEquals(3, testList.getList().size());
         assertEquals(jp1, testList.getList().get(0));
         assertEquals(jp2, testList.getList().get(1));
@@ -56,17 +56,17 @@ public class TestJobApplicationList {
         testList.addJob(jp2);
         testList.addJob(jp3);
 
-        testList.getList().remove(jp1);
+        testList.removeJob(jp1);
 
         assertEquals(2, testList.getList().size());
         assertEquals(jp2, testList.getList().get(0));
         assertEquals(jp3, testList.getList().get(1));
 
-        testList.getList().remove(jp3);
+        testList.removeJob(jp3);
         assertEquals(1, testList.getList().size());
         assertEquals(jp2, testList.getList().get(0));
 
-        testList.getList().remove(jp2);
+        testList.removeJob(jp2);
         assertEquals(0, testList.getList().size());
     }
 
@@ -77,28 +77,28 @@ public class TestJobApplicationList {
         testList.addJob(jp3);
 
         ArrayList<JobApplication> filteredList1 = testList.filterByStatus(JobStatus.Applied);
-        assertEquals(3,filteredList1.size());
-        assertEquals(jp1, testList.getList().get(0));
-        assertEquals(jp2, testList.getList().get(1));
-        assertEquals(jp3, testList.getList().get(2));
+        assertEquals(3, filteredList1.size());
+        assertEquals(jp1, filteredList1.get(0));
+        assertEquals(jp2, filteredList1.get(1));
+        assertEquals(jp3, filteredList1.get(2));
 
-        ArrayList<JobApplication> filteredList2 = testList.filterByStatus(JobStatus.Withdrawn);
         jp1.setStatus(JobStatus.Withdrawn);
         jp2.setStatus(JobStatus.Final_interview);
+        ArrayList<JobApplication> filteredList2 = testList.filterByStatus(JobStatus.Withdrawn);
         assertEquals(1, filteredList2.size());
-        assertEquals(jp1, testList.getList().get(0));
+        assertEquals(jp1, filteredList2.get(0));
 
-        ArrayList<JobApplication> filteredList3 = testList.filterByStatus(JobStatus.Rejected);
         jp2.setStatus(JobStatus.Rejected);
         jp3.setStatus(JobStatus.Rejected);
+        ArrayList<JobApplication> filteredList3 = testList.filterByStatus(JobStatus.Rejected);
         assertEquals(2, filteredList3.size());
-        assertEquals(jp2, testList.getList().get(0));
-        assertEquals(jp3, testList.getList().get(1));
+        assertEquals(jp2, filteredList3.get(0));
+        assertEquals(jp3, filteredList3.get(1));
 
-        ArrayList<JobApplication> filteredList4 = testList.filterByStatus(JobStatus.Second_interview);
         jp1.setStatus(JobStatus.Rejected);
         jp2.setStatus(JobStatus.Final_interview);
         jp3.setStatus(JobStatus.Third_interview);
+        ArrayList<JobApplication> filteredList4 = testList.filterByStatus(JobStatus.Second_interview);
         assertEquals(0, filteredList4.size());
     }
 
@@ -110,15 +110,15 @@ public class TestJobApplicationList {
 
         ArrayList<JobApplication> filteredList = testList.filterByCompany("a");
         assertEquals(2, filteredList.size());
-        assertEquals(jp1, testList.getList().get(0));
-        assertEquals(jp2, testList.getList().get(1));
+        assertEquals(jp1, filteredList.get(0));
+        assertEquals(jp2, filteredList.get(1));
 
         ArrayList<JobApplication> filteredList2 = testList.filterByCompany("b");
-        assertEquals(1, filteredList.size());
-        assertEquals(jp3, testList.getList().get(0));
+        assertEquals(1, filteredList2.size());
+        assertEquals(jp3, filteredList2.get(0));
 
         ArrayList<JobApplication> filteredList3 = testList.filterByCompany("c");
-        assertEquals(0,filteredList.size());
+        assertEquals(0, filteredList3.size());
     }
 
 }
