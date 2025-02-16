@@ -30,6 +30,6 @@ public class TestJobApplication {
         assertEquals("https://www.sonypicturesjobs.com/search-jobs/audio/22978/1?glat=49.26539993286133&glon=-123.25499725341797", jobApplication.getPostingURL());
         assertNull(jobApplication.getCoverLetter());
         assertEquals(JobStatus.Applied,jobApplication.getStatus());
-        assertNull(jobApplication.getNotes());
+        assertEquals("",jobApplication.getNotes());
     }
 }

@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 //Represents a job application with company name, job title, applied date, 
 //application status, uploaded resume, uploaded cover letter (optional), 
-//job posting and notes (optional)
+//job posting url and notes (optional)
 public class JobApplication {
     private String companyName;
     private String jobTitle;
@@ -19,7 +19,7 @@ public class JobApplication {
     // REQUIRES: companyName, jobTitle, appliedDate, resume and postingURL are not
     // empty
     // EFFECTS: instantiate a new job application with given company name, job
-    // title, applied date, uploaded resume and job posting; with coverLetter and notes set to empty and job status set to Applied
+    // title, applied date, uploaded resume and job posting url; with coverLetter and notes set to empty and job status set to Applied
     public JobApplication(String companyName, String jobTitle, LocalDate appliedDate, File resume, String postingURL) {
         this.companyName = companyName;
         this.jobTitle = jobTitle;
@@ -27,7 +27,7 @@ public class JobApplication {
         this.resume = resume; 
         this.postingURL = postingURL;
         this.coverLetter = null; 
-        this.notes = null;
+        this.notes = "";
         this.status = JobStatus.Applied;
     }
 
