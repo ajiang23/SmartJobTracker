@@ -1,0 +1,124 @@
+package model;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.io.File;
+
+public class TestJobApplicationList {
+    private JobApplicationList testList;
+    LocalDate date1 = LocalDate.of(2025, 01, 01);
+    LocalDate date2 = LocalDate.of(2025, 01, 02);
+    LocalDate date3 = LocalDate.of(2025, 01, 03);
+    String url1 = "url1";
+    String url2 = "url2";
+    String url3 = "url3";
+    File resume1 = new File("src/test/resources/Test.pdf");
+    File resume2 = new File("src/test/resources/Test2.pdf");
+    File resume3 = new File("src/test/resources/Test3.pdf");
+    JobApplication jp1 = new JobApplication("a", "a", date1, resume1, url1);
+    JobApplication jp2 = new JobApplication("a", "b", date2, resume2, url2);
+    JobApplication jp3 = new JobApplication("b", "c", date3, resume3, url3);
+
+    @BeforeEach
+    void runBefore() {
+        testList = new JobApplicationList();
+    }
+
+    @Test
+    void testConstructor() {
+        assertEquals(0, testList.getList().size());
+    }
+
+    @Test
+    void testAddJob() {
+        testList.addJob(jp1);
+        assertEquals(1, testList.getList().size());
+        assertEquals(jp1, testList.getList().get(0));
+        testList.getList().add(jp2);
+        assertEquals(2, testList.getList().size());
+        assertEquals(jp1, testList.getList().get(0));
+        assertEquals(jp2, testList.getList().get(1));
+        testList.getList().add(jp3);
+        assertEquals(3, testList.getList().size());
+        assertEquals(jp1, testList.getList().get(0));
+        assertEquals(jp2, testList.getList().get(1));
+        assertEquals(jp3, testList.getList().get(2));
+    }
+
+    @Test
+    void testRemoveJob() {
+        testList.addJob(jp1);
+        testList.addJob(jp2);
+        testList.addJob(jp3);
+
+        testList.getList().remove(jp1);
+
+        assertEquals(2, testList.getList().size());
+        assertEquals(jp2, testList.getList().get(0));
+        assertEquals(jp3, testList.getList().get(1));
+
+        testList.getList().remove(jp3);
+        assertEquals(1, testList.getList().size());
+        assertEquals(jp2, testList.getList().get(0));
+
+        testList.getList().remove(jp2);
+        assertEquals(0, testList.getList().size());
+    }
+
+    @Test
+    void testFilterByStatus() {
+        testList.addJob(jp1);
+        testList.addJob(jp2);
+        testList.addJob(jp3);
+
+        ArrayList<JobApplication> filteredList1 = testList.filterByStatus(JobStatus.Applied);
+        assertEquals(3,filteredList1.size());
+        assertEquals(jp1, testList.getList().get(0));
+        assertEquals(jp2, testList.getList().get(1));
+        assertEquals(jp3, testList.getList().get(2));
+
+        ArrayList<JobApplication> filteredList2 = testList.filterByStatus(JobStatus.Withdrawn);
+        jp1.setStatus(JobStatus.Withdrawn);
+        jp2.setStatus(JobStatus.Final_interview);
+        assertEquals(1, filteredList2.size());
+        assertEquals(jp1, testList.getList().get(0));
+
+        ArrayList<JobApplication> filteredList3 = testList.filterByStatus(JobStatus.Rejected);
+        jp2.setStatus(JobStatus.Rejected);
+        jp3.setStatus(JobStatus.Rejected);
+        assertEquals(2, filteredList3.size());
+        assertEquals(jp2, testList.getList().get(0));
+        assertEquals(jp3, testList.getList().get(1));
+
+        ArrayList<JobApplication> filteredList4 = testList.filterByStatus(JobStatus.Second_interview);
+        jp1.setStatus(JobStatus.Rejected);
+        jp2.setStatus(JobStatus.Final_interview);
+        jp3.setStatus(JobStatus.Third_interview);
+        assertEquals(0, filteredList4.size());
+    }
+
+    @Test
+    void testFilterByCompany() {
+        testList.addJob(jp1);
+        testList.addJob(jp2);
+        testList.addJob(jp3);
+
+        ArrayList<JobApplication> filteredList = testList.filterByCompany("a");
+        assertEquals(2, filteredList.size());
+        assertEquals(jp1, testList.getList().get(0));
+        assertEquals(jp2, testList.getList().get(1));
+
+        ArrayList<JobApplication> filteredList2 = testList.filterByCompany("b");
+        assertEquals(1, filteredList.size());
+        assertEquals(jp3, testList.getList().get(0));
+
+        ArrayList<JobApplication> filteredList3 = testList.filterByCompany("c");
+        assertEquals(0,filteredList.size());
+    }
+
+}
