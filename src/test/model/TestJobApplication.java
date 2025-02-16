@@ -21,7 +21,7 @@ public class TestJobApplication {
     }
 
     @Test
-    void constructorTest() {
+    void testConstructor() {
         assertEquals("Sony", jobApplication.getCompanyName());
         assertEquals("Digital Cinema Technician", jobApplication.getJobTitle());
         assertEquals(LocalDate.of(2025, 01, 01), jobApplication.getAppliedDate());
