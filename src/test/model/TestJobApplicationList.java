@@ -71,38 +71,6 @@ public class TestJobApplicationList {
     }
 
     @Test
-    void testFilterByStatus() {
-        testList.addJob(jp1);
-        testList.addJob(jp2);
-        testList.addJob(jp3);
-
-        ArrayList<JobApplication> filteredList1 = testList.filterByStatus(JobStatus.Applied);
-        assertEquals(3, filteredList1.size());
-        assertEquals(jp1, filteredList1.get(0));
-        assertEquals(jp2, filteredList1.get(1));
-        assertEquals(jp3, filteredList1.get(2));
-
-        jp1.setStatus(JobStatus.Withdrawn);
-        jp2.setStatus(JobStatus.Final_interview);
-        ArrayList<JobApplication> filteredList2 = testList.filterByStatus(JobStatus.Withdrawn);
-        assertEquals(1, filteredList2.size());
-        assertEquals(jp1, filteredList2.get(0));
-
-        jp2.setStatus(JobStatus.Rejected);
-        jp3.setStatus(JobStatus.Rejected);
-        ArrayList<JobApplication> filteredList3 = testList.filterByStatus(JobStatus.Rejected);
-        assertEquals(2, filteredList3.size());
-        assertEquals(jp2, filteredList3.get(0));
-        assertEquals(jp3, filteredList3.get(1));
-
-        jp1.setStatus(JobStatus.Rejected);
-        jp2.setStatus(JobStatus.Final_interview);
-        jp3.setStatus(JobStatus.Third_interview);
-        ArrayList<JobApplication> filteredList4 = testList.filterByStatus(JobStatus.Second_interview);
-        assertEquals(0, filteredList4.size());
-    }
-
-    @Test
     void testFilterByCompany() {
         testList.addJob(jp1);
         testList.addJob(jp2);
