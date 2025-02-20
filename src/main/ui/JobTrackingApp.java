@@ -1,6 +1,7 @@
 package ui;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import model.JobApplication;
@@ -31,20 +32,26 @@ public class JobTrackingApp {
 
         while (keepRunning) {
             displayMenu();
-            command = input.nextInt();
-            input.nextLine();
 
-            if (command == 6) {
-                keepRunning = false;
+            if (input.hasNextInt()) {
+                command = input.nextInt();
+                input.nextLine();
+
+                if (command == 6) {
+                    keepRunning = false;
+                } else {
+                    handleUserCommand(command);
+                }
             } else {
-                handleUserCommand(command);
+                System.out.println("Invalid selection. Please enter a valid number.");
+                input.nextLine();
             }
         }
         System.out.println("\nGoodbye!");
     }
 
     // EFFECTS: displays menu of options
-    public void displayMenu() {
+    private void displayMenu() {
         System.out.println("\nSelect from:");
         System.out.println("\n1 -> View all applications");
         System.out.println("\n2 -> Add an application");
@@ -56,7 +63,7 @@ public class JobTrackingApp {
     }
 
     // EFFECTS: processes user's command
-    public void handleUserCommand(Integer command) {
+    private void handleUserCommand(Integer command) {
         switch (command) {
             case 1:
                 viewJobList();
@@ -80,9 +87,8 @@ public class JobTrackingApp {
 
     // MODIFIES: newList
     // EFFECTS: adds a job application to this list
-    public void addJob() {
+    private void addJob() {
         System.out.println("Enter the company name:");
-        
         String companyName = getRequiredInput();
 
         System.out.println("Enter the job title:");
@@ -121,7 +127,7 @@ public class JobTrackingApp {
     // MODIFIES: appliedDate in this job application
     // EFFECTS: ensures user's input is in LocalDate format otherwise change to
     // today's date
-    public LocalDate processDate() {
+    private LocalDate processDate() {
         String dateInput = input.nextLine();
         LocalDate appliedDate;
         try {
@@ -135,7 +141,7 @@ public class JobTrackingApp {
 
     // MODIFIES: resume in this job application
     // EFFECTS: ensures user uploads a valid resume file
-    public File processResume() {
+    private File processResume() {
         File resume = null;
         while (resume == null || !resume.exists()) {
             String resumePath = input.nextLine();
@@ -148,7 +154,7 @@ public class JobTrackingApp {
     }
 
     // EFFECTS: displays all exising job applications in this list
-    public void viewJobList() {
+    private void viewJobList() {
         if (newList.getList().isEmpty()) {
             System.out.println("No job applications found.");
             return;
@@ -164,7 +170,7 @@ public class JobTrackingApp {
     // REQUIRES: job application must exist in this list
     // MODIFIES: newList
     // EFFECTS: removes a job application from this list
-    public void removeJob() {
+    private void removeJob() {
         if (newList.getList().isEmpty()) {
             System.out.println("No job applications to remove.");
             return;
@@ -174,6 +180,7 @@ public class JobTrackingApp {
         viewJobList();
 
         int userSelection;
+
         try {
             userSelection = input.nextInt();
 
@@ -181,11 +188,11 @@ public class JobTrackingApp {
                 System.out.println("Invalid selection. Please enter a valid number.");
                 return;
             }
-
             JobApplication removeJob = newList.getList().get(userSelection - 1);
             newList.removeJob(removeJob);
-            System.out.println("Removed successfully:" + removeJob.getCompanyName() + "-" + removeJob.getJobTitle());
-        } catch (Exception notValid) {
+            System.out.println("Invalid input. Please enter a number.");
+
+        } catch (InputMismatchException notValid) {
             System.out.println("Invalid input. Please enter a number.");
             return;
         }
@@ -193,7 +200,7 @@ public class JobTrackingApp {
 
     // EFFECTS: selects a valid job application from this list otherwise gives error
     // messages
-    public JobApplication selectJobApplication() {
+    private JobApplication selectJobApplication() {
         if (newList.getList().isEmpty()) {
             System.out.println("No job applications to update.");
             return null;
@@ -213,7 +220,7 @@ public class JobTrackingApp {
 
             return newList.getList().get(userSelection - 1);
 
-        } catch (Exception notValid) {
+        } catch (InputMismatchException notValid) {
             System.out.println("Invalid input. Please enter a number.");
             return null;
         }
@@ -232,6 +239,10 @@ public class JobTrackingApp {
         }
         input.nextLine();
 
+        jobStatusHelper(job);
+    }
+
+    private void jobStatusHelper(JobApplication job) {
         JobStatus newStatus = null;
         while (newStatus == null) {
             System.out.print("Enter a valid status: ");
@@ -243,44 +254,44 @@ public class JobTrackingApp {
             }
             try {
                 newStatus = JobStatus.valueOf(statusInput);
+                job.setStatus(newStatus);
+                System.out.println("Updated successfully: " + job.getCompanyName() + " - "
+                        + job.getJobTitle() + " -> " + newStatus);
             } catch (IllegalArgumentException invalidInput) {
                 System.out.println("Invalid status. Please enter a valid status from the list provided.");
+                return;
             }
         }
-
-        job.setStatus(newStatus);
-        System.out.println("Updated successfully: " + job.getCompanyName() + " - "
-                + job.getJobTitle() + " -> " + newStatus);
-                runApp();
     }
-
-
 
     // REQUIRES: job applicaiton must exist in this list
     // MODIFIES: a job application's status
     // EFFECTS: updates a job application's status
-    public void updateStatus() {
-        JobApplication jobToUpdate = selectJobApplication();
-        updateJobStatus(jobToUpdate);
-        input.nextLine();
+    private void updateStatus() {
+        updateJobStatus(selectJobApplication());
     }
 
     // EFFECTS: filters job applications by company name and displays filtered
     // results
-    public void filterJobByCompany() {
-        System.out.println("Enter company name to filter by:");
-        String input = getRequiredInput();
+    private void filterJobByCompany() {
+        if (newList.getList().isEmpty()) {
+            System.out.println("No job applicationst to be filtered.");
+            return;
+        }
 
-        ArrayList<JobApplication> filteredList = newList.filterByCompany(input);
+        System.out.println("Enter company name to filter by: ");
+        String userInput = getRequiredInput();
+
+        ArrayList<JobApplication> filteredList = newList.filterByCompany(userInput);
 
         if (filteredList.isEmpty()) {
-            System.out.println("No job applications found for the company: " + input);
+            System.out.println("No job applications found for the company: " + userInput);
+            return;
         } else {
             System.out.println("Filtered results:");
             for (JobApplication job : filteredList) {
                 System.out.println("-" + job.getCompanyName() + "-" + job.getJobTitle());
             }
         }
-        runApp();
     }
 }
