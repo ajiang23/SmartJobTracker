@@ -7,20 +7,30 @@ import java.util.Scanner;
 import model.JobApplication;
 import model.JobApplicationList;
 import model.JobStatus;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
-//Job application tracking app 
+//Represents the job application tracking app 
 public class JobTrackingApp {
     private Scanner input;
     private JobApplicationList newList;
+    private static final String JSON_STORE = "./data/jobApplication.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
+    private JobApplicationList jobList;
 
     // EFFECTS: instantiates and runs the app
     public JobTrackingApp() {
         input = new Scanner(System.in);
         newList = new JobApplicationList();
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         runApp();
     }
 
@@ -293,5 +303,16 @@ public class JobTrackingApp {
                 System.out.println("-" + job.getCompanyName() + "-" + job.getJobTitle());
             }
         }
+    }
+
+    //EFFECTS: saves job applications to file 
+    private void saveJobAppList() {
+       //stub
+    }
+
+    //MODIFIES: this 
+    //EFFECTS: loads job applications from file 
+    private void loadJobAppList() {
+      //stub
     }
 }
