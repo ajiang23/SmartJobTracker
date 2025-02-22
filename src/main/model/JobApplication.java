@@ -3,10 +3,14 @@ package model;
 import java.io.File;
 import java.time.LocalDate;
 
+import org.json.JSONObject;
+
+import persistence.Writable;
+
 //Represents a job application with company name, job title, applied date, 
 //application status, uploaded resume, uploaded cover letter (optional), 
 //job posting url and notes (optional)
-public class JobApplication {
+public class JobApplication implements Writable {
     private String companyName;
     private String jobTitle;
     private LocalDate appliedDate;
@@ -120,4 +124,29 @@ public class JobApplication {
         return notes;
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("companyName", companyName);
+        json.put("jobTitle", jobTitle);
+        json.put("appliedDate", appliedDate.toString());
+        json.put("resume", resume.getPath());
+        json.put("postingURL", postingURL);
+        json.put("coverLetter", coverLetter != null ? coverLetter.getPath() : JSONObject.NULL);
+        json.put("notes", notes);
+        json.put("status", status.toString());
+        return json;
+    }
+
+    @Override
+    public String toString() {
+        return "Company: " + companyName
+                + ", Job Title: " + jobTitle
+                + ", Applied Date: " + appliedDate
+                + ", Status: " + status
+                + ", Resume: " + resume.getPath()
+                + ", Cover Letter: " + (coverLetter != null ? coverLetter.getPath() : "None")
+                + ", Posting URL: " + postingURL
+                + ", Notes: " + notes;
+    }
 }
