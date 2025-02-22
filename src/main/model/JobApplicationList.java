@@ -1,9 +1,13 @@
 package model;
 
 import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import persistence.Writable;
 
 //Represents a list of job applications
-public class JobApplicationList {
+public class JobApplicationList implements Writable {
     private ArrayList<JobApplication> newList;
 
     // Effects: instatiates an empty list of job applications
@@ -39,6 +43,22 @@ public class JobApplicationList {
     // EFFECTS: return this job application list
     public ArrayList<JobApplication> getList() {
         return newList;
+    }
+
+    @Override
+    public JSONObject toJson(){
+        JSONObject json = new JSONObject();
+        json.put("job applications", jobAppToJson());
+        return json;
+    }
+
+    private JSONArray jobAppToJson(){
+        JSONArray jsonArray = new JSONArray();
+        for (JobApplication nextJobApp : newList){
+            jsonArray.put(nextJobApp.toJson());
+        }
+
+        return jsonArray;
     }
 
 }
