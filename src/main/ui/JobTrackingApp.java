@@ -39,13 +39,19 @@ public class JobTrackingApp {
     private void runApp() {
         boolean keepRunning = true;
         Integer command = null;
+        String userSelection = null;
+
+        System.out.println("Would you like to load your previous job applications? Please enter yes or no:");
+        userSelection = input.nextLine().toLowerCase();
+        while (userSelection.isEmpty()){
+            System.out.println ("Invalid input. Please enter yes or no.");
+            userSelection = input.nextLine().toLowerCase();
+        }
+        if (userSelection.equals("yes")) {
+            loadJobAppList();
+        }
 
         while (keepRunning) {
-            System.out.println("Would you like to load your previous job applications? Please enter yes or no:");
-            String userSelection = input.nextLine().toLowerCase();
-            if (userSelection.equals("yes")) {
-                loadJobAppList();
-            }
             displayMenu();
 
             if (input.hasNextInt()) {
