@@ -1,0 +1,24 @@
+{
+    "job applications": [
+        {
+            "companyName": "Google",
+            "jobTitle": "Specialist",
+            "appliedDate": "2025-01-01",
+            "resume": "src/test/resources/Test.pdf",
+            "postingURL": "google.ca",
+            "coverLetter": null, 
+            "notes": "",
+            "status": "Applied"
+        },
+        {
+            "companyName": "Sony",
+            "jobTitle": "Manager",
+            "appliedDate": "2025-02-21",
+            "resume": "src/test/resources/Test1.pdf",
+            "postingURL": "sony.ca",
+            "coverLetter": "src/test/resources/Test2.pdf", 
+            "notes": "test notes",
+            "status": "Rejected"
+        }
+    ]
+}
