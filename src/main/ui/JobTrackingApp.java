@@ -325,7 +325,7 @@ public class JobTrackingApp {
     private void saveJobAppList() {
         try {
             jsonWriter.open();
-            jsonWriter.write(jobList);
+            jsonWriter.write(newList);
             jsonWriter.close();
             System.out.println("Successfully saved job applications to " + JSON_STORE);
         } catch (FileNotFoundException notFound) {
@@ -337,7 +337,7 @@ public class JobTrackingApp {
     // EFFECTS: loads job applications from file
     private void loadJobAppList() {
         try {
-            jobList = jsonReader.read();
+            newList = jsonReader.read();
             System.out.println("Successfully loaded job applications from " + JSON_STORE);
         } catch (IOException notReadable) {
             System.out.println("Unable to read from file: " + JSON_STORE);
