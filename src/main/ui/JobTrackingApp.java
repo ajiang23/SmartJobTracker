@@ -305,14 +305,26 @@ public class JobTrackingApp {
         }
     }
 
-    //EFFECTS: saves job applications to file 
+    // EFFECTS: saves job applications to file
     private void saveJobAppList() {
-       //stub
+        try {
+            jsonWriter.open();
+            jsonWriter.write(jobList);
+            jsonWriter.close();
+            System.out.println("Successfully saved job applications to " + JSON_STORE);
+        } catch (FileNotFoundException notFound) {
+            System.out.println("Unable to write to file " + JSON_STORE);
+        }
     }
 
-    //MODIFIES: this 
-    //EFFECTS: loads job applications from file 
+    // MODIFIES: this
+    // EFFECTS: loads job applications from file
     private void loadJobAppList() {
-      //stub
+        try {    
+            jobList = jsonReader.read();
+            System.out.println("Successfully loaded job applications from " + JSON_STORE);
+        } catch (IOException notReadable) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
     }
 }
