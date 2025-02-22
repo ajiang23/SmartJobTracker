@@ -26,7 +26,7 @@ public class JobTrackingApp {
     private JobApplicationList jobList;
 
     // EFFECTS: instantiates and runs the app
-    public JobTrackingApp() {
+    public JobTrackingApp() throws FileNotFoundException {
         input = new Scanner(System.in);
         newList = new JobApplicationList();
         jsonWriter = new JsonWriter(JSON_STORE);
@@ -41,6 +41,11 @@ public class JobTrackingApp {
         Integer command = null;
 
         while (keepRunning) {
+            System.out.println("Would you like to load your previous job applications? Please enter yes or no:");
+            String userSelection = input.nextLine().toLowerCase();
+            if (userSelection.equals("yes")) {
+                loadJobAppList();
+            }
             displayMenu();
 
             if (input.hasNextInt()) {
@@ -56,6 +61,11 @@ public class JobTrackingApp {
                 System.out.println("Invalid selection. Please enter a valid number.");
                 input.nextLine();
             }
+        }
+        System.out.println("Would you like to save your job applications before exiting? Please enter yes or no:");
+        String userSelection2 = input.nextLine().toLowerCase();
+        if (userSelection2.equals("yes")) {
+            saveJobAppList();
         }
         System.out.println("\nGoodbye!");
     }
@@ -320,7 +330,7 @@ public class JobTrackingApp {
     // MODIFIES: this
     // EFFECTS: loads job applications from file
     private void loadJobAppList() {
-        try {    
+        try {
             jobList = jsonReader.read();
             System.out.println("Successfully loaded job applications from " + JSON_STORE);
         } catch (IOException notReadable) {
