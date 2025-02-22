@@ -1,0 +1,22 @@
+{"job applications": [
+    {
+        "resume": "src/test/resources/Test.pdf",
+        "notes": "",
+        "companyName": "Amazon",
+        "jobTitle": "Developer",
+        "appliedDate": "2024-11-05",
+        "coverLetter": null,
+        "postingURL": "amazon.ca",
+        "status": "Final_interview"
+    },
+    {
+        "resume": "src/test/resources/Test1.pdf",
+        "notes": "This is test note for ja2.",
+        "companyName": "Github",
+        "jobTitle": "Specialist",
+        "appliedDate": "2025-01-07",
+        "coverLetter": "src/test/resources/Test2.pdf",
+        "postingURL": "github.ca",
+        "status": "Applied"
+    }
+]}
