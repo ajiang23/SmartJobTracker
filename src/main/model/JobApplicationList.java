@@ -52,6 +52,7 @@ public class JobApplicationList implements Writable {
         return json;
     }
 
+    //EFFECTS: returns job applications in this job application list as a JSON array
     private JSONArray jobAppToJson(){
         JSONArray jsonArray = new JSONArray();
         for (JobApplication nextJobApp : newList){

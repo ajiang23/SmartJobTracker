@@ -137,16 +137,4 @@ public class JobApplication implements Writable {
         json.put("status", status.toString());
         return json;
     }
-
-    @Override
-    public String toString() {
-        return "Company: " + companyName
-                + ", Job Title: " + jobTitle
-                + ", Applied Date: " + appliedDate
-                + ", Status: " + status
-                + ", Resume: " + resume.getPath()
-                + ", Cover Letter: " + (coverLetter != null ? coverLetter.getPath() : "None")
-                + ", Posting URL: " + postingURL
-                + ", Notes: " + notes;
-    }
 }
