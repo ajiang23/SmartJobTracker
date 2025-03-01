@@ -230,7 +230,7 @@ public class JobTrackingApp {
             }
             JobApplication removeJob = newList.getList().get(userSelection - 1);
             newList.removeJob(removeJob);
-            System.out.println("Invalid input. Please enter a number.");
+            System.out.println("Job application removed successfully.");
 
         } catch (InputMismatchException notValid) {
             System.out.println("Invalid input. Please enter a number.");
