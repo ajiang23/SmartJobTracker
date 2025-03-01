@@ -23,7 +23,6 @@ public class JobTrackingApp {
     private static final String JSON_STORE = "./data/jobApplication.json";
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
-    private JobApplicationList jobList;
 
     // EFFECTS: instantiates and runs the app
     public JobTrackingApp() throws FileNotFoundException {
@@ -35,45 +34,60 @@ public class JobTrackingApp {
     }
 
     // EFFECTS: runs the application loop, processes user's input until user chooses
-    // to exit
+    // to exit. Prompts user to load and save job applications at the beginning and
+    // end.
     private void runApp() {
-        boolean keepRunning = true;
-        Integer command = null;
-        String userSelection = null;
-
-        System.out.println("Would you like to load your previous job applications? Please enter yes or no:");
-        userSelection = input.nextLine().toLowerCase();
-        while (userSelection.isEmpty()){
-            System.out.println ("Invalid input. Please enter yes or no.");
-            userSelection = input.nextLine().toLowerCase();
-        }
-        if (userSelection.equals("yes")) {
+        if (getUserConfirmation("Would you like to load your previous job applications? Please enter yes or no:")) {
             loadJobAppList();
         }
 
+        boolean keepRunning = true;
+
         while (keepRunning) {
             displayMenu();
-
-            if (input.hasNextInt()) {
-                command = input.nextInt();
-                input.nextLine();
-
-                if (command == 6) {
-                    keepRunning = false;
-                } else {
-                    handleUserCommand(command);
-                }
-            } else {
-                System.out.println("Invalid selection. Please enter a valid number.");
-                input.nextLine();
-            }
+            keepRunning = processUserCommand();
         }
-        System.out.println("Would you like to save your job applications before exiting? Please enter yes or no:");
-        String userSelection2 = input.nextLine().toLowerCase();
-        if (userSelection2.equals("yes")) {
+
+        if (getUserConfirmation(
+                "Would you like to save your job applications before exiting? Please enter yes or no:")) {
             saveJobAppList();
         }
+
         System.out.println("\nGoodbye!");
+    }
+
+    // EFFECTS: (helper method fro runApp) Prompts user with a yes/no question and
+    // ensures valid input.
+    // return true if user enters "yes" and false if user enters "no".
+    private boolean getUserConfirmation(String message) {
+        System.out.println(message);
+        String response = input.nextLine().trim().toLowerCase();
+
+        while (!response.equals("yes") && !response.equals("no")) {
+            System.out.println("Invalid input. Please enter yes or no.");
+            response = input.nextLine().toLowerCase();
+        }
+        return response.equals("yes");
+    }
+
+    // EFFECTS: (helper method for runApp) Processes user's command input. Ensures
+    // input is a valid integer
+    // and executes command accordingly. Return the correct app state -
+    // false if user enters 6, true otherwise.
+    private boolean processUserCommand() {
+        while (!input.hasNextInt()) {
+            System.out.println("Invalid selection. Please enter a valid number.");
+            input.nextLine();
+        }
+        int command = input.nextInt();
+        input.nextLine();
+
+        if (command == 6) {
+            return false;
+        } else {
+            handleUserCommand(command);
+            return true;
+        }
     }
 
     // EFFECTS: displays menu of options
@@ -268,6 +282,10 @@ public class JobTrackingApp {
         jobStatusHelper(job);
     }
 
+    // MODIFIES: status of a given job application (helper method for
+    // updateJobStatus)
+    // EFFECTS: updates a job application's status to user's input, ensures user's
+    // input is valid otherwise gives error messages
     private void jobStatusHelper(JobApplication job) {
         JobStatus newStatus = null;
         while (newStatus == null) {

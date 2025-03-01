@@ -46,16 +46,17 @@ public class JobApplicationList implements Writable {
     }
 
     @Override
-    public JSONObject toJson(){
+    public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("job applications", jobAppToJson());
         return json;
     }
 
-    //EFFECTS: returns job applications in this job application list as a JSON array
-    private JSONArray jobAppToJson(){
+    // EFFECTS: returns job applications in this job application list as a JSON
+    // array
+    private JSONArray jobAppToJson() {
         JSONArray jsonArray = new JSONArray();
-        for (JobApplication nextJobApp : newList){
+        for (JobApplication nextJobApp : newList) {
             jsonArray.put(nextJobApp.toJson());
         }
 

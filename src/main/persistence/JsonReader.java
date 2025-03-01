@@ -32,7 +32,7 @@ public class JsonReader {
 
     // EFFECTS: reads source file as string and returns it
     private String readFile(String source) throws IOException {
-       return Files.readString(Paths.get(source), StandardCharsets.UTF_8);
+        return Files.readString(Paths.get(source), StandardCharsets.UTF_8);
     }
 
     // EFFECTS: parses job application list from JSON object and returns
@@ -46,8 +46,8 @@ public class JsonReader {
     // MODIFIES: jl
     // EFFECTS: parses job applications from JSON object and add them to newList
     private void addJobApplications(JobApplicationList jl, JSONObject jsonObject) {
-        JSONArray jsonArray = jsonObject.getJSONArray ("job applications");
-        for (Object nextJobApp: jsonArray) {
+        JSONArray jsonArray = jsonObject.getJSONArray("job applications");
+        for (Object nextJobApp : jsonArray) {
             JSONObject jobApp = (JSONObject) nextJobApp;
             addJobApplication(jl, jobApp);
         }
@@ -58,16 +58,16 @@ public class JsonReader {
     // EFFECTS: parses job application fron JSON object and adds it to job
     // application list
     private void addJobApplication(JobApplicationList jl, JSONObject jsonObject) {
-        String companyName = jsonObject.getString ("companyName");
+        String companyName = jsonObject.getString("companyName");
         String jobTitle = jsonObject.getString("jobTitle");
         LocalDate appliedDate = LocalDate.parse(jsonObject.getString("appliedDate"));
-        File resume = new File (jsonObject.getString("resume"));
+        File resume = new File(jsonObject.getString("resume"));
         String postingURL = jsonObject.getString("postingURL");
-        String coverLetterPath = jsonObject.optString("coverLetter", ""); 
+        String coverLetterPath = jsonObject.optString("coverLetter", "");
         File coverLetter = coverLetterPath.isEmpty() ? null : new File(coverLetterPath);
         String notes = jsonObject.optString("notes", "");
         JobStatus status = JobStatus.valueOf(jsonObject.getString("status"));
-        JobApplication jobApp = new JobApplication(companyName, jobTitle,appliedDate,resume,postingURL);
+        JobApplication jobApp = new JobApplication(companyName, jobTitle, appliedDate, resume, postingURL);
         jobApp.setCoverLetter(coverLetter);
         jobApp.setNotes(notes);
         jobApp.setStatus(status);
