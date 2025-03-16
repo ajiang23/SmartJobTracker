@@ -37,7 +37,8 @@ public class JobTrackingApp {
     // to exit. Prompts user to load and save job applications at the beginning and
     // end.
     private void runApp() {
-        if (getUserConfirmation("Would you like to load your previous job applications? Please enter yes or no:")) {
+        if (getUserConfirmation(
+                "Would you like to load your previous job applications? Please enter yes or no. Warning: If you choose not to load, you will lose your progress!")) {
             loadJobAppList();
         }
 
@@ -82,7 +83,7 @@ public class JobTrackingApp {
         int command = input.nextInt();
         input.nextLine();
 
-        if (command == 6) {
+        if (command == 8) {
             return false;
         } else {
             handleUserCommand(command);
@@ -98,7 +99,9 @@ public class JobTrackingApp {
         System.out.println("\n3 -> Remove an application");
         System.out.println("\n4 -> Update an application's status");
         System.out.println("\n5 -> Filter by company name");
-        System.out.println("\n6 -> Exit");
+        System.out.println("\n6 -> Save progress");
+        System.out.println("\n7 -> Load applications");
+        System.out.println("\n8 -> Exit");
 
     }
 
@@ -119,6 +122,12 @@ public class JobTrackingApp {
                 break;
             case 5:
                 filterJobByCompany();
+                break;
+            case 6:
+                saveJobAppList();
+                break;
+            case 7:
+                loadJobAppList();
                 break;
             default:
                 System.out.println("Invalid selection. Please enter a valid number.");
@@ -222,7 +231,7 @@ public class JobTrackingApp {
         int userSelection;
 
         try {
-            userSelection = input.nextInt();
+            userSelection = input.nextInt(); // exception for catching - run time exception; if it's checked it only gives errors if i don't catch it 
 
             if (userSelection < 1 || userSelection > newList.getList().size()) {
                 System.out.println("Invalid selection. Please enter a valid number.");
@@ -237,6 +246,7 @@ public class JobTrackingApp {
             return;
         }
     }
+
 
     // EFFECTS: selects a valid job application from this list otherwise gives error
     // messages
