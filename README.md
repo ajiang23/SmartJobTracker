@@ -16,5 +16,5 @@ Tracking job applications can be overwhelming. Many job seekers tend to rely on 
 - As a user, I want to be able to view all job applications in a list and filter them based on specific criteria.  
 - As a user, I want to be able to update the status of a job application as my application progresses.  
 - As a user, I want to be able to delete a job application that I no longer want to track. 
-- As a user, when I select the exit option from the application menu, I want to be reminded to save my job application list to file and have the option to do so or not. 
-- As a user, when I start the application, I want to be given the option to load my job application list from file. 
+- As a user, I want to be able to save the state of the application anytime. When I select the exit option from the application menu, I want to be reminded to save my job application list to file and have the option to do so or not. 
+- As a user, I want to be able to load my job application list from file anytime. When I start the application, I want to be given the option to load my job application list from file. 
