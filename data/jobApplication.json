@@ -1,1 +1,10 @@
-{"job applications": []}
+{"job applications": [{
+    "resume": "/Users/aliciajiang/get-pip.py",
+    "notes": "notes",
+    "companyName": "abc",
+    "jobTitle": "specialist",
+    "appliedDate": "2025-03-21",
+    "coverLetter": null,
+    "postingURL": "g",
+    "status": "Offer_received"
+}]}
