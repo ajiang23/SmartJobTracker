@@ -1,10 +1,1 @@
-{"job applications": [{
-    "resume": "src/test/resources/Test.pdf",
-    "notes": "",
-    "companyName": "abc",
-    "jobTitle": "specialist",
-    "appliedDate": "2025-02-28",
-    "coverLetter": null,
-    "postingURL": "g",
-    "status": "Rejected"
-}]}
+{"job applications": []}
