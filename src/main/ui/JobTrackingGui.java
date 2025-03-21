@@ -45,6 +45,8 @@ public class JobTrackingGUI extends JFrame {
     // private JTable jobTable;
 
     // Constructs GUI
+    // EFFECTS: Initializes the graphical user interface and loads the saved job
+    // applications if user chooses to.
     public JobTrackingGUI() {
         super("Job Application Tracker");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,13 +67,16 @@ public class JobTrackingGUI extends JFrame {
         }
     }
 
+    // EFFECTS: Prompts user to choose whether to load the previously saved state of
+    // the application and returns user's choice.
     private boolean getUserConfirmation(String message) {
         int confirm = JOptionPane.showConfirmDialog(this, message, "Confirmation",
                 JOptionPane.YES_NO_OPTION);
         return confirm == JOptionPane.YES_OPTION;
     }
 
-    @SuppressWarnings ("methodlength")
+    // EFFECTS: Initializes and arranges UI components in the frame.
+    @SuppressWarnings("methodlength")
     private void setupMainUI() {
         mainPanel = new JPanel(new BorderLayout());
 
@@ -133,6 +138,7 @@ public class JobTrackingGUI extends JFrame {
         repaint();
     }
 
+    // EFFECTS: Handles selection of filter options.
     private void handleFilterSelection(JComboBox<String> filterDropdown) {
         String selectedOption = (String) filterDropdown.getSelectedItem();
 
@@ -143,7 +149,7 @@ public class JobTrackingGUI extends JFrame {
         }
     }
 
-    // Removes a job application from the list
+    // EFFECTS: Removes the selected job application.
     private void removeJob() {
         int selectedIndex = jobJList.getSelectedIndex();
         if (selectedIndex == -1) {
@@ -166,7 +172,9 @@ public class JobTrackingGUI extends JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
         }
     }
-    
+
+    // MODIFIES: jobList
+    // EFFECTS: Adds a new job application with user's input and updates the UI.
     @SuppressWarnings("methodlength")
     private void openAddJobWindow() {
         JTextField companyField = new JTextField();
@@ -284,6 +292,8 @@ public class JobTrackingGUI extends JFrame {
         }
     }
 
+    // MODIFIES: jobList
+    // EFFECTS: Displays all job applications.
     private void refreshJobList() {
         jobListModel.clear();
         for (JobApplication job : jobList.getList()) {
@@ -294,7 +304,7 @@ public class JobTrackingGUI extends JFrame {
         jobJList.repaint();
     }
 
-    // Displays a pie chart of job application statuses with percentage labels.
+    // EFFECTS: Displays a pie chart of job application statuses with percentage.
     @SuppressWarnings("methodlength")
     private void showStatusPieChart() {
         if (jobList.getList().isEmpty()) {
@@ -347,6 +357,8 @@ public class JobTrackingGUI extends JFrame {
         chartFrame.setVisible(true);
     }
 
+    // MODIFIES: jobList
+    // EFFECTS: Changes the selected job application's status and updates the UI.
     private void updateJobStatus() {
         int selectedIndex = jobJList.getSelectedIndex();
         if (selectedIndex == -1) {
@@ -375,7 +387,7 @@ public class JobTrackingGUI extends JFrame {
         }
     }
 
-    // Resets the job list to display all applications
+    // EFFECTS: Resets the job list to display all applications
     private void resetJobList() {
         DefaultListModel<JobApplication> allJobsModel = new DefaultListModel<>();
         for (JobApplication job : jobList.getList()) {
@@ -385,7 +397,8 @@ public class JobTrackingGUI extends JFrame {
         filterDropdown.setSelectedIndex(0);
     }
 
-    // Filters job applications by company name and displays results directly in the
+    // EFFECTS: Filters job applications by company name and displays results
+    // directly in the
     // main panel
     private void filterJobByCompany() {
         if (jobList.getList().isEmpty()) {
@@ -404,7 +417,7 @@ public class JobTrackingGUI extends JFrame {
         jobJList.setModel(filteredModel);
     }
 
-    // Saves job applications to file
+    // EFFECTS: Saves the current job application list to a JSON file.
     private void saveJobAppList() {
         try {
             jsonWriter.open();
@@ -416,6 +429,8 @@ public class JobTrackingGUI extends JFrame {
         }
     }
 
+    // MODIFIES: jobList
+    // EFFECTS: Loads job applications from a JSON file and updates the UI.
     private void loadJobAppList() {
         try {
             jobList = jsonReader.read();
@@ -428,7 +443,8 @@ public class JobTrackingGUI extends JFrame {
         }
     }
 
-    // Exits the application
+    // EFFECTS: Saves the current session's data if user chooses to and terminates
+    // the application.
     private void exitApplication() {
         int saveConfirm = JOptionPane.showConfirmDialog(this,
                 "Would you like to save your job applications before exiting?", "Save Data",
