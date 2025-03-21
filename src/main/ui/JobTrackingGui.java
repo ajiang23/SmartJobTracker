@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // JobTrackingGUI Application 
-public class JobTrackingGui extends JFrame {
+public class JobTrackingGUI extends JFrame {
     private static final String JSON_STORE = "./data/jobApplication.json";
     private JobApplicationList jobList;
     private JsonWriter jsonWriter;
@@ -45,7 +45,7 @@ public class JobTrackingGui extends JFrame {
     // private JTable jobTable;
 
     // Constructs GUI
-    public JobTrackingGui() {
+    public JobTrackingGUI() {
         super("Job Application Tracker");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
@@ -71,6 +71,7 @@ public class JobTrackingGui extends JFrame {
         return confirm == JOptionPane.YES_OPTION;
     }
 
+    @SuppressWarnings ("methodlength")
     private void setupMainUI() {
         mainPanel = new JPanel(new BorderLayout());
 
@@ -165,7 +166,8 @@ public class JobTrackingGui extends JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
         }
     }
-
+    
+    @SuppressWarnings("methodlength")
     private void openAddJobWindow() {
         JTextField companyField = new JTextField();
         JTextField titleField = new JTextField();
@@ -293,6 +295,7 @@ public class JobTrackingGui extends JFrame {
     }
 
     // Displays a pie chart of job application statuses with percentage labels.
+    @SuppressWarnings("methodlength")
     private void showStatusPieChart() {
         if (jobList.getList().isEmpty()) {
             JOptionPane.showMessageDialog(this, "No job applications available to display.");
