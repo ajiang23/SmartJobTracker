@@ -58,4 +58,62 @@ public class TestJobApplication {
         assertEquals("new notes", jobApplication.getNotes());
     }
 
+    @Test
+    void testToStringNull() {
+        String companyName = "ABC Corp";
+        String jobTitle = "Software Engineer";
+        LocalDate appliedDate = LocalDate.of(2025, 01, 02);
+        String status = "Applied";
+        File resume = new File("src/test/resources/Test.pdf");
+        File coverLetter = null;
+        String postingURL = "https://www.jobposting.com";
+        String notes = "";
+
+        JobApplication app = new JobApplication(companyName, jobTitle, appliedDate, resume, postingURL);
+        app.setAppliedDate(appliedDate);
+        app.setCoverLetter(coverLetter);
+        app.setNotes(notes);
+
+        String expected = "<html><b>Company:</b> " + companyName
+                + "<br/><b>Job Title:</b> " + jobTitle
+                + "<br/><b>Applied Date:</b> " + appliedDate
+                + "<br/><b>Status:</b> " + status
+                + "<br/><b>Resume:</b> " + resume.getPath()
+                + "<br/><b>Cover Letter:</b> None"
+                + "<br/><b>Posting URL:</b> " + postingURL
+                + "<br/><b>Notes:</b> None"
+                + "</html>";
+
+        assertEquals(expected, app.toString());
+    }
+
+    @Test
+    void testToString() {
+        String companyName = "ABC Corp";
+        String jobTitle = "Software Engineer";
+        LocalDate appliedDate = LocalDate.of(2025, 01, 02);
+        String status = "Applied";
+        File resume = new File("src/test/resources/Test.pdf");
+        File coverLetter = new File("src/test/resources/Test1.pdf");
+        String postingURL = "https://www.jobposting.com";
+        String notes = "Great opportunity, looking forward to it.";
+
+        JobApplication app = new JobApplication(companyName, jobTitle, appliedDate, resume, postingURL);
+        app.setAppliedDate(appliedDate);
+        app.setCoverLetter(coverLetter);
+        app.setNotes(notes);
+
+        String expected = "<html><b>Company:</b> " + companyName
+                + "<br/><b>Job Title:</b> " + jobTitle
+                + "<br/><b>Applied Date:</b> " + appliedDate
+                + "<br/><b>Status:</b> " + status
+                + "<br/><b>Resume:</b> " + resume.getPath()
+                + "<br/><b>Cover Letter:</b> " + coverLetter.getPath()
+                + "<br/><b>Posting URL:</b> " + postingURL
+                + "<br/><b>Notes:</b> " + notes
+                + "</html>";
+
+        assertEquals(expected, app.toString());
+    }
+
 }
