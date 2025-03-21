@@ -124,6 +124,7 @@ public class JobApplication implements Writable {
         return notes;
     }
 
+    // EFFECTS: Creates and returns a new JSONObject representation of this job application. 
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
@@ -138,7 +139,7 @@ public class JobApplication implements Writable {
         return json;
     }
 
-
+    //EFFECTS: Returns a formatted string representation of this job application. 
     @Override
     public String toString() {
         return "<html><b>Company:</b> " + companyName
