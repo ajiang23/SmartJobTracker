@@ -38,7 +38,7 @@ public class JobTrackingApp {
     // end.
     private void runApp() {
         if (getUserConfirmation(
-                "Would you like to load your previous job applications? Please enter yes or no. Warning: If you choose not to load, you will lose your progress!")) {
+                "Would you like to load your previous job applications? Please enter yes or no.")) {
             loadJobAppList();
         }
 
@@ -106,6 +106,7 @@ public class JobTrackingApp {
     }
 
     // EFFECTS: processes user's command
+    @SuppressWarnings("methodlength")
     private void handleUserCommand(Integer command) {
         switch (command) {
             case 1:
@@ -231,8 +232,7 @@ public class JobTrackingApp {
         int userSelection;
 
         try {
-            userSelection = input.nextInt(); // exception for catching - run time exception; if it's checked it only gives errors if i don't catch it 
-
+            userSelection = input.nextInt(); 
             if (userSelection < 1 || userSelection > newList.getList().size()) {
                 System.out.println("Invalid selection. Please enter a valid number.");
                 return;
@@ -246,7 +246,6 @@ public class JobTrackingApp {
             return;
         }
     }
-
 
     // EFFECTS: selects a valid job application from this list otherwise gives error
     // messages
