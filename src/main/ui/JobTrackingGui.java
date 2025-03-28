@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // JobTrackingGUI Application 
-public class JobTrackingGUI extends JFrame {
+public class JobTrackingGui extends JFrame {
     private static final String JSON_STORE = "./data/jobApplication.json";
     private JobApplicationList jobList;
     private JsonWriter jsonWriter;
@@ -47,7 +47,7 @@ public class JobTrackingGUI extends JFrame {
     // Constructs GUI
     // EFFECTS: Initializes the graphical user interface and loads the saved job
     // applications if user chooses to.
-    public JobTrackingGUI() {
+    public JobTrackingGui() {
         super("Job Application Tracker");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
