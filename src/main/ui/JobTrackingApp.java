@@ -307,7 +307,7 @@ public class JobTrackingApp {
             }
             try {
                 newStatus = JobStatus.valueOf(statusInput);
-                job.setStatus(newStatus);
+                job.updateStatus(newStatus);
                 System.out.println("Updated successfully: " + job.getCompanyName() + " - "
                         + job.getJobTitle() + " -> " + newStatus);
             } catch (IllegalArgumentException invalidInput) {

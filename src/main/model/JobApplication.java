@@ -153,4 +153,9 @@ public class JobApplication implements Writable {
                 + "</html>";
     }
 
+    public void updateStatus (JobStatus newStatus) {
+        this.status = newStatus;
+        EventLog.getInstance().logEvent(new Event("Updated status to: " + newStatus + "for " + jobTitle + "in " + companyName));
+    }
+
 }
