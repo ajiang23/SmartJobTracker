@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import javax.swing.AbstractAction;
+import javax.swing.JOptionPane;
+
 import model.JobApplication;
 import model.JobApplicationList;
 import model.JobStatus;
@@ -53,6 +56,8 @@ public class JobTrackingApp {
                 "Would you like to save your job applications before exiting? Please enter yes or no:")) {
             saveJobAppList();
         }
+
+        //printEventLogOnExit();
 
         System.out.println("\nGoodbye!");
     }
@@ -370,4 +375,12 @@ public class JobTrackingApp {
             System.out.println("Unable to read from file: " + JSON_STORE);
         }
     }
+
+    // //EFFECTS: prints all events that occurred during this session 
+    // private void printEventLogOnExit() {
+    //     for (model.Event e: model.EventLog.getInstance()) {
+    //         System.out.println(e.toString());
+    //     }
+    // }
+	
 }

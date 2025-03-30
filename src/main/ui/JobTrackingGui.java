@@ -1,5 +1,6 @@
 package ui;
 
+import model.EventLog;
 import model.JobApplication;
 import model.JobApplicationList;
 import model.JobStatus;
@@ -49,7 +50,7 @@ public class JobTrackingGui extends JFrame {
     // applications if user chooses to.
     public JobTrackingGui() {
         super("Job Application Tracker");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null);
 
@@ -65,6 +66,19 @@ public class JobTrackingGui extends JFrame {
         if (loadData) {
             loadJobAppList();
         }
+
+        // Print event log to console when exiting app
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                System.out.println("\nEvent Log:");
+                for (model.Event event : model.EventLog.getInstance()) {
+                    System.out.println(event.toString());
+                }
+                System.exit(0);
+            }
+        });
+
     }
 
     // EFFECTS: Prompts user to choose whether to load the previously saved state of
@@ -166,7 +180,7 @@ public class JobTrackingGui extends JFrame {
                 "Confirm Delete", JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {
-            jobList.getList().remove(selectedJob);
+            jobList.removeJob(selectedJob);
             refreshJobList();
             JOptionPane.showMessageDialog(this, "Job application deleted successfully.", "Success",
                     JOptionPane.INFORMATION_MESSAGE);
@@ -380,7 +394,7 @@ public class JobTrackingGui extends JFrame {
                 JOptionPane.PLAIN_MESSAGE, null, statusStrings, selectedJob.getStatus().name());
 
         if (selectedStatus != null) {
-            selectedJob.setStatus(JobStatus.valueOf(selectedStatus));
+            selectedJob.updateStatus(JobStatus.valueOf(selectedStatus));
             refreshJobList();
             JOptionPane.showMessageDialog(this, "Job status updated successfully!", "Success",
                     JOptionPane.INFORMATION_MESSAGE);
@@ -433,7 +447,9 @@ public class JobTrackingGui extends JFrame {
     // EFFECTS: Loads job applications from a JSON file and updates the UI.
     private void loadJobAppList() {
         try {
+            jobList.suppressLogging(true);
             jobList = jsonReader.read();
+            jobList.suppressLogging(false);
             refreshJobList();
 
             JOptionPane.showMessageDialog(this, "Successfully loaded job applications!");
@@ -452,10 +468,9 @@ public class JobTrackingGui extends JFrame {
 
         if (saveConfirm == JOptionPane.YES_OPTION) {
             saveJobAppList();
-            System.exit(0);
+            dispatchEvent(new java.awt.event.WindowEvent(this, java.awt.event.WindowEvent.WINDOW_CLOSING));
         } else if (saveConfirm == JOptionPane.NO_OPTION) {
-            System.exit(0);
+            dispatchEvent(new java.awt.event.WindowEvent(this, java.awt.event.WindowEvent.WINDOW_CLOSING));
         }
     }
-
 }

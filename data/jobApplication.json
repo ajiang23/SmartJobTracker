@@ -1,10 +1,22 @@
-{"job applications": [{
-    "resume": "/Users/aliciajiang/get-pip.py",
-    "notes": "notes",
-    "companyName": "abc",
-    "jobTitle": "specialist",
-    "appliedDate": "2025-03-21",
-    "coverLetter": null,
-    "postingURL": "g",
-    "status": "Offer_received"
-}]}
+{"job applications": [
+    {
+        "resume": "/Users/aliciajiang/get-pip.py",
+        "notes": "notes",
+        "companyName": "abc",
+        "jobTitle": "specialist",
+        "appliedDate": "2025-03-21",
+        "coverLetter": null,
+        "postingURL": "g",
+        "status": "Applied"
+    },
+    {
+        "resume": "/Users/aliciajiang/get-pip.py",
+        "notes": "",
+        "companyName": "cba",
+        "jobTitle": "manager",
+        "appliedDate": "2025-03-30",
+        "coverLetter": null,
+        "postingURL": "google.ca",
+        "status": "Applied"
+    }
+]}

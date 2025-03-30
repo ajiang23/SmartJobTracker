@@ -116,4 +116,20 @@ public class TestJobApplication {
         assertEquals(expected, app.toString());
     }
 
+    @Test
+    public void testUpdateStatusLogsEvent() {
+        jobApplication.updateStatus(JobStatus.First_interview);
+
+        boolean found = false;
+        for (Event e : EventLog.getInstance()) {
+            if (e.getDescription().equals("Updated status to: First_interview for Digital Cinema Technician in Sony")) {
+                found = true;
+                break;
+            }
+        }
+
+        assertTrue(found, "Expected event was not logged.");
+        assertEquals(JobStatus.First_interview, jobApplication.getStatus());
+    }
+
 }

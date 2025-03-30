@@ -9,16 +9,29 @@ import persistence.Writable;
 //Represents a list of job applications
 public class JobApplicationList implements Writable {
     private ArrayList<JobApplication> newList;
+    private boolean suppressLogging;
 
-    // Effects: instatiates an empty list of job applications
+    // EFFECTS: instatiates an empty list of job applications
     public JobApplicationList() {
         newList = new ArrayList<>();
+        suppressLogging = false;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: change suppressLogging to true/false to signal event log to record
+    // or not
+    public void suppressLogging(boolean suppress) {
+        this.suppressLogging = suppress;
     }
 
     // MODIFIES: this
     // EFFECTS: add a new job application to the end of the list
     public void addJob(JobApplication newJob) {
         newList.add(newJob);
+        if (!suppressLogging) {
+            EventLog.getInstance().logEvent(
+                    new Event("New job application added: " + newJob.getJobTitle() + " in " + newJob.getCompanyName()));
+        }
     }
 
     // REQUIRES: job application to be removed is part of the list
@@ -26,6 +39,8 @@ public class JobApplicationList implements Writable {
     // EFFECTS: remove an existing job application from the list
     public void removeJob(JobApplication existingJob) {
         newList.remove(existingJob);
+        EventLog.getInstance().logEvent(new Event(
+                "Job application removed: " + existingJob.getJobTitle() + " in " + existingJob.getCompanyName()));
     }
 
     // EFFECTS: filter current list by companyName
@@ -37,6 +52,7 @@ public class JobApplicationList implements Writable {
                 filteredList.add(nextJob);
             }
         }
+        EventLog.getInstance().logEvent(new Event("Filtered by company name: " + company));
         return filteredList;
     }
 

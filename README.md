@@ -27,3 +27,16 @@ specific criteria" by clicking "Filter by: None" at the top menu bar. In the dro
 - You can locate my visual component which is a pie chart visualizing the percentage of job applications based on their current status by clicking "Menu" at the top left corner, then selecting "View Status Breakdown" from the dropdown menu. A new window will open displaying the pie chart. 
 - You can save the current state of the application at any time by selecting "Save Applications" from the "Menu" dropdown in the top left corner. You will also be prompted to choose to save the state of the application when exiting by choosing "Exit" from the "Menu."
 - You can reload your previously saved job applications at any time by selecting "Load Applications" from the "Menu" dropdown. You will also be prompted to choose whether to load your previously saved data when first opening the application. Please note, if you choose not to load the previous state of the application and later choose to save the state of the current session, the new data will overwrite the previous session's data, and the old data will be lost. 
+
+## **Phase 4: Task 2**
+```
+Event Log:
+Fri Mar 28 21:47:27 PDT 2025 
+New job application added: specialist in abc
+Fri Mar 28 21:47:36 PDT 2025
+Updated status to: First_interview for specialist in abc
+Fri Mar 28 21:47:42 PDT 2025
+Filtered by company name: abc
+Fri Mar 28 21:47:46 PDT 2025
+Job application removed: specialist in abc
+```

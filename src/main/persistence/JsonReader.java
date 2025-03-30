@@ -39,7 +39,10 @@ public class JsonReader {
     // it
     private JobApplicationList parseJobApplicationList(JSONObject jsonObject) {
         JobApplicationList jl = new JobApplicationList();
+        jl.suppressLogging(true); 
         addJobApplications(jl, jsonObject);
+        jl.suppressLogging(false); 
+
         return jl;
     }
 

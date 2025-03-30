@@ -124,7 +124,8 @@ public class JobApplication implements Writable {
         return notes;
     }
 
-    // EFFECTS: Creates and returns a new JSONObject representation of this job application. 
+    // EFFECTS: Creates and returns a new JSONObject representation of this job
+    // application.
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
@@ -139,7 +140,7 @@ public class JobApplication implements Writable {
         return json;
     }
 
-    //EFFECTS: Returns a formatted string representation of this job application. 
+    // EFFECTS: Returns a formatted string representation of this job application.
     @Override
     public String toString() {
         return "<html><b>Company:</b> " + companyName
@@ -153,9 +154,10 @@ public class JobApplication implements Writable {
                 + "</html>";
     }
 
-    public void updateStatus (JobStatus newStatus) {
+    public void updateStatus(JobStatus newStatus) {
         this.status = newStatus;
-        EventLog.getInstance().logEvent(new Event("Updated status to: " + newStatus + "for " + jobTitle + "in " + companyName));
+        EventLog.getInstance()
+                .logEvent(new Event("Updated status to: " + newStatus + " for " + jobTitle + " in " + companyName));
     }
 
 }
