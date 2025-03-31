@@ -40,3 +40,8 @@ Filtered by company name: abc
 Fri Mar 28 21:47:46 PDT 2025
 Job application removed: specialist in abc
 ```
+
+## **Phase 4: Task 3**
+If I were to refactor my design, I would consider separating logic for filtering, updating, and saving job applications into dedicated service classes instead of having them tightly coupled with the UI classes. This would follow the principle of separation of concerns and improve testability.
+
+Additionally, the console-based and GUI-based versions of the app currently share duplicated logic (e.g., both load and save jobs, update status, etc.). A possible improvement would be to extract a shared controller layer that both UIs use, reducing redundancy and centralizing the application's core behavior.
