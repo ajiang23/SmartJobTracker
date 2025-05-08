@@ -55,14 +55,14 @@ public class JobTrackingGui extends JFrame {
     public JobTrackingGui() {
         super("Job Application Tracker");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setSize(800, 600);
+        setSize(900, 650);
         setLocationRelativeTo(null);
 
         jobList = new JobApplicationList();
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
 
-        setupMainUI(); 
+        setupMainUI();
         setVisible(true);
 
         boolean loadData = getUserConfirmation("Would you like to load your previous job applications?");
@@ -95,7 +95,14 @@ public class JobTrackingGui extends JFrame {
     // EFFECTS: Initializes and arranges UI components in the frame.
     @SuppressWarnings("methodlength")
     private void setupMainUI() {
+        try {
+            UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatIntelliJLaf());
+        } catch (Exception ex) {
+            System.err.println("Failed to initialize FlatLaf.");
+        }
+
         mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Menu");
@@ -117,7 +124,7 @@ public class JobTrackingGui extends JFrame {
         menuBar.add(menu);
         setJMenuBar(menuBar);
 
-        JPanel topPanel = new JPanel();
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
 
         JButton addButton = new JButton("Add Job");
         String[] filterOptions = { "Filter by: None", "Filter by: Company Name" };
@@ -134,14 +141,31 @@ public class JobTrackingGui extends JFrame {
         jobJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPane = new JScrollPane(jobJList);
 
+        jobJList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                    boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
+                        cellHasFocus);
+                label.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createEmptyBorder(10, 10, 10, 10), // Padding
+                        BorderFactory.createLineBorder(Color.LIGHT_GRAY) // Border
+                ));
+                return label;
+            }
+        });
+
         mainPanel.add(topPanel, BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-        JPanel bottomButtonPanel = new JPanel(new GridLayout(1, 3, 10, 10));
+        JPanel bottomButtonPanel = new JPanel();
+        bottomButtonPanel.setLayout(new BoxLayout(bottomButtonPanel, BoxLayout.LINE_AXIS));
+        bottomButtonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        bottomButtonPanel.add(Box.createHorizontalGlue());
 
         JButton deleteButton = new JButton("Delete Selected");
         JButton updateStatusButton = new JButton("Update Status");
-        JButton viewPostingButton = new JButton("🔍 View Job Posting");
+        JButton viewPostingButton = new JButton("View Job Posting");
 
         deleteButton.addActionListener(e -> removeJob());
         updateStatusButton.addActionListener(e -> updateJobStatus());
@@ -156,13 +180,52 @@ public class JobTrackingGui extends JFrame {
 
             JobPosting jp = selected.getJobPosting();
 
-            if (jp == null || jp.getDescription() == null || jp.getDescription().equals("[Job description not found]")
+            if (jp == null
+                    || jp.getDescription() == null
+                    || jp.getDescription().equals("[Job description not found]")
                     || jp.getDescription().equals("[Failed to fetch job description]")) {
-                String manual = JOptionPane.showInputDialog(this, "Unable to fetch description. Paste it manually:");
-                if (manual != null && !manual.trim().isEmpty()) {
-                    jp = new JobPosting(selected.getJobTitle(), manual.trim(), selected.getPostingURL());
+
+                JTextArea inputArea = new JTextArea(20, 60);
+                inputArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                inputArea.setLineWrap(true);
+                inputArea.setWrapStyleWord(true);
+                inputArea.setFont(new Font("SansSerif", Font.PLAIN, 14));
+
+                JScrollPane bigPane = new JScrollPane(inputArea);
+
+                JDialog dlg = new JDialog(this, "Paste Job Description", true);
+                dlg.setLayout(new BorderLayout(10, 10));
+                dlg.add(new JLabel(
+                        "Could not fetch job description. Please paste it manually:"),
+                        BorderLayout.NORTH);
+                dlg.add(bigPane, BorderLayout.CENTER);
+
+                JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+                JButton ok = new JButton("OK");
+                JButton cancel = new JButton("Cancel");
+                buttons.add(ok);
+                buttons.add(cancel);
+                dlg.add(buttons, BorderLayout.SOUTH);
+
+                final boolean[] confirmed = { false };
+                ok.addActionListener(ev -> {
+                    confirmed[0] = true;
+                    dlg.dispose();
+                });
+                cancel.addActionListener(ev -> dlg.dispose());
+
+                dlg.setSize(800, 400);
+                dlg.setLocationRelativeTo(this);
+                dlg.setResizable(true);
+                dlg.setVisible(true);
+
+                if (confirmed[0] && !inputArea.getText().trim().isEmpty()) {
+                    String manual = inputArea.getText().trim();
+                    jp = new JobPosting(selected.getJobTitle(), manual, selected.getPostingURL());
                     selected.setJobPosting(jp);
-                } else {
+                }
+
+                if (jp == null) {
                     return;
                 }
             }
@@ -171,18 +234,27 @@ public class JobTrackingGui extends JFrame {
             textArea.setLineWrap(true);
             textArea.setWrapStyleWord(true);
             textArea.setEditable(false);
+            textArea.setBorder(BorderFactory.createLineBorder(new Color(0, 120, 215)));
+            textArea.setMargin(new Insets(10, 10, 10, 10));
             JScrollPane jpScrollPane = new JScrollPane(textArea);
+            jpScrollPane.setViewportBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+            JPanel content = new JPanel(new BorderLayout());
+            content.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            content.add(jpScrollPane, BorderLayout.CENTER);
 
             JFrame descriptionFrame = new JFrame("Job Posting Details");
             descriptionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            descriptionFrame.setSize(800, 600); 
+            descriptionFrame.setSize(800, 600);
             descriptionFrame.setLocationRelativeTo(this);
-            descriptionFrame.add(jpScrollPane);
+            descriptionFrame.add(content);
             descriptionFrame.setVisible(true);
         });
 
         bottomButtonPanel.add(deleteButton);
+        bottomButtonPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         bottomButtonPanel.add(updateStatusButton);
+        bottomButtonPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         bottomButtonPanel.add(viewPostingButton);
 
         mainPanel.add(bottomButtonPanel, BorderLayout.SOUTH);
@@ -193,31 +265,32 @@ public class JobTrackingGui extends JFrame {
     }
 
     // private void showCachedPostings() {
-    //     JobPostingCache cache = JobPostingCache.getInstance();
-    //     StringBuilder sb = new StringBuilder();
+    // JobPostingCache cache = JobPostingCache.getInstance();
+    // StringBuilder sb = new StringBuilder();
 
-    //     if (cache.getAllPostings().isEmpty()) {
-    //         sb.append("No cached job postings.");
-    //     } else {
-    //         for (Map.Entry<String, JobPosting> entry : cache.getAllPostings().entrySet()) {
-    //             sb.append("URL: ").append(entry.getKey()).append("\n");
-    //             sb.append(entry.getValue()).append("\n\n");
-    //         }
-    //     }
+    // if (cache.getAllPostings().isEmpty()) {
+    // sb.append("No cached job postings.");
+    // } else {
+    // for (Map.Entry<String, JobPosting> entry : cache.getAllPostings().entrySet())
+    // {
+    // sb.append("URL: ").append(entry.getKey()).append("\n");
+    // sb.append(entry.getValue()).append("\n\n");
+    // }
+    // }
 
-    //     JTextArea textArea = new JTextArea(sb.toString());
-    //     textArea.setLineWrap(true);
-    //     textArea.setWrapStyleWord(true);
-    //     textArea.setEditable(false);
-    //     JScrollPane jpScrollPane = new JScrollPane(textArea); 
-    //     JDialog dialog = new JDialog(this, "Job Posting Details", true);
-    //     dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-    //     dialog.setLayout(new BorderLayout());
-    //     dialog.add(jpScrollPane, BorderLayout.CENTER);
-    //     dialog.setSize(800, 600); 
-    //     dialog.setResizable(true); 
-    //     dialog.setLocationRelativeTo(this); 
-    //     dialog.setVisible(true);
+    // JTextArea textArea = new JTextArea(sb.toString());
+    // textArea.setLineWrap(true);
+    // textArea.setWrapStyleWord(true);
+    // textArea.setEditable(false);
+    // JScrollPane jpScrollPane = new JScrollPane(textArea);
+    // JDialog dialog = new JDialog(this, "Job Posting Details", true);
+    // dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    // dialog.setLayout(new BorderLayout());
+    // dialog.add(jpScrollPane, BorderLayout.CENTER);
+    // dialog.setSize(800, 600);
+    // dialog.setResizable(true);
+    // dialog.setLocationRelativeTo(this);
+    // dialog.setVisible(true);
     // }
 
     // EFFECTS: Handles selection of filter options.
@@ -361,7 +434,6 @@ public class JobTrackingGui extends JFrame {
 
             JobPostingCache cache = JobPostingCache.getInstance();
 
-
             if (!url.startsWith("http://") && !url.startsWith("https://")) {
                 url = "https://" + url;
             }
@@ -369,28 +441,53 @@ public class JobTrackingGui extends JFrame {
             JobPosting posting;
             String description = JobDescriptionFetcher.fetchDescription(url);
 
-            if (description == null || description.trim().isEmpty()
+            if (description == null
+                    || description.trim().isEmpty()
                     || description.equals("[Job description not found]")
                     || description.equals("[Failed to fetch job description]")) {
-                JTextArea inputArea = new JTextArea(15, 50); 
+
+                JTextArea inputArea = new JTextArea(20, 60);
                 inputArea.setLineWrap(true);
                 inputArea.setWrapStyleWord(true);
-                JScrollPane scrollPane = new JScrollPane(inputArea);
+                inputArea.setFont(new Font("SansSerif", Font.PLAIN, 14));
 
-                int result1 = JOptionPane.showConfirmDialog(this, scrollPane,
-                        "Could not fetch job description. Please paste it manually:",
-                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                JScrollPane bigPane = new JScrollPane(inputArea);
+                bigPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-                if (result1 == JOptionPane.OK_OPTION) {
-                    description = inputArea.getText().trim();
-                    if (description.isEmpty()) {
+                JDialog dlg = new JDialog(this, "Paste Job Description", true);
+                dlg.setLayout(new BorderLayout(10, 10));
+
+                dlg.add(new JLabel("Could not fetch job description. Please paste it manually:"), BorderLayout.NORTH);
+
+                dlg.add(bigPane, BorderLayout.CENTER);
+
+                JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+                JButton ok = new JButton("OK");
+                JButton cancel = new JButton("Cancel");
+                buttons.add(ok);
+                buttons.add(cancel);
+                dlg.add(buttons, BorderLayout.SOUTH);
+
+                final boolean[] confirmed = { false };
+                ok.addActionListener(e -> {
+                    confirmed[0] = true;
+                    dlg.dispose();
+                });
+                cancel.addActionListener(e -> dlg.dispose());
+
+                dlg.setSize(800, 400);
+                dlg.setLocationRelativeTo(this);
+                dlg.setResizable(true);
+                dlg.setVisible(true);
+
+                if (confirmed[0]) {
+                    String manual = inputArea.getText().trim();
+                    if (!manual.isEmpty()) {
+                        description = manual;
+                    } else {
                         description = "[No description available]";
                     }
                 } else {
-                    description = "[No description available]";
-                }
-
-                if (description == null || description.trim().isEmpty()) {
                     description = "[No description available]";
                 }
             }
