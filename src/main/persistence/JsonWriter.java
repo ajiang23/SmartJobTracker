@@ -3,6 +3,8 @@ package persistence;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import model.JobApplicationList;
+import model.JobPosting;
+
 import java.io.File;
 import org.json.JSONObject;
 
@@ -41,4 +43,5 @@ public class JsonWriter {
     public void close() {
         writer.close();
     }
+
 }

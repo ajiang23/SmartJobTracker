@@ -19,6 +19,7 @@ public class JobApplication implements Writable {
     private File coverLetter;
     private String postingURL;
     private String notes;
+    private JobPosting jobPosting;
 
     // REQUIRES: companyName, jobTitle, appliedDate, resume and postingURL are not
     // empty
@@ -137,6 +138,15 @@ public class JobApplication implements Writable {
         json.put("coverLetter", coverLetter != null ? coverLetter.getPath() : JSONObject.NULL);
         json.put("notes", notes);
         json.put("status", status.toString());
+
+        if (jobPosting != null) {
+            JSONObject jp = new JSONObject();
+            jp.put("title", jobPosting.getTitle());
+            jp.put("description", jobPosting.getDescription());
+            jp.put("url", jobPosting.getUrl());
+            json.put("jobPosting", jp);
+        }
+
         return json;
     }
 
@@ -158,6 +168,14 @@ public class JobApplication implements Writable {
         this.status = newStatus;
         EventLog.getInstance()
                 .logEvent(new Event("Updated status to: " + newStatus + " for " + jobTitle + " in " + companyName));
+    }
+
+    public void setJobPosting(JobPosting jobPosting) {
+        this.jobPosting = jobPosting;
+    }
+
+    public JobPosting getJobPosting() {
+        return jobPosting;
     }
 
 }

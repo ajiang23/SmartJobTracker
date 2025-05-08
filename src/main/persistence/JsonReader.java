@@ -39,9 +39,9 @@ public class JsonReader {
     // it
     private JobApplicationList parseJobApplicationList(JSONObject jsonObject) {
         JobApplicationList jl = new JobApplicationList();
-        jl.suppressLogging(true); 
+        jl.suppressLogging(true);
         addJobApplications(jl, jsonObject);
-        jl.suppressLogging(false); 
+        jl.suppressLogging(false);
 
         return jl;
     }
@@ -74,6 +74,16 @@ public class JsonReader {
         jobApp.setCoverLetter(coverLetter);
         jobApp.setNotes(notes);
         jobApp.setStatus(status);
+
+        if (jsonObject.has("jobPosting")) {
+            JSONObject jpObj = jsonObject.getJSONObject("jobPosting");
+            String jpTitle = jpObj.getString("title");
+            String jpDesc = jpObj.getString("description");
+            String jpUrl = jpObj.getString("url");
+            model.JobPosting jp = new model.JobPosting(jpTitle, jpDesc, jpUrl);
+            jobApp.setJobPosting(jp);
+        }
+
         jl.addJob(jobApp);
     }
 

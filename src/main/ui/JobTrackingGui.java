@@ -3,6 +3,7 @@ package ui;
 import model.EventLog;
 import model.JobApplication;
 import model.JobApplicationList;
+import model.JobDescriptionFetcher;
 import model.JobStatus;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -25,6 +26,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import model.JobPosting;
+import model.JobPostingCache;
+import model.JobDescriptionFetcher;
 
 // JobTrackingGUI Application 
 public class JobTrackingGui extends JFrame {
@@ -58,10 +62,9 @@ public class JobTrackingGui extends JFrame {
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
 
-        setupMainUI(); // Start with the main menu
+        setupMainUI(); 
         setVisible(true);
 
-        // Prompt user after UI loads
         boolean loadData = getUserConfirmation("Would you like to load your previous job applications?");
         if (loadData) {
             loadJobAppList();
@@ -116,7 +119,7 @@ public class JobTrackingGui extends JFrame {
 
         JPanel topPanel = new JPanel();
 
-        JButton addButton = new JButton("➕ Add Job");
+        JButton addButton = new JButton("Add Job");
         String[] filterOptions = { "Filter by: None", "Filter by: Company Name" };
         JComboBox<String> filterDropdown = new JComboBox<>(filterOptions);
 
@@ -134,16 +137,53 @@ public class JobTrackingGui extends JFrame {
         mainPanel.add(topPanel, BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-        JPanel bottomButtonPanel = new JPanel(new GridLayout(1, 2, 10, 10));
+        JPanel bottomButtonPanel = new JPanel(new GridLayout(1, 3, 10, 10));
 
         JButton deleteButton = new JButton("Delete Selected");
         JButton updateStatusButton = new JButton("Update Status");
+        JButton viewPostingButton = new JButton("🔍 View Job Posting");
 
         deleteButton.addActionListener(e -> removeJob());
         updateStatusButton.addActionListener(e -> updateJobStatus());
+        viewPostingButton.addActionListener(e -> {
+            JobApplication selected = jobJList.getSelectedValue();
+
+            if (selected == null) {
+                JOptionPane.showMessageDialog(this, "Please select a job application.", "No Selection",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            JobPosting jp = selected.getJobPosting();
+
+            if (jp == null || jp.getDescription() == null || jp.getDescription().equals("[Job description not found]")
+                    || jp.getDescription().equals("[Failed to fetch job description]")) {
+                String manual = JOptionPane.showInputDialog(this, "Unable to fetch description. Paste it manually:");
+                if (manual != null && !manual.trim().isEmpty()) {
+                    jp = new JobPosting(selected.getJobTitle(), manual.trim(), selected.getPostingURL());
+                    selected.setJobPosting(jp);
+                } else {
+                    return;
+                }
+            }
+
+            JTextArea textArea = new JTextArea(jp.toString());
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            textArea.setEditable(false);
+            JScrollPane jpScrollPane = new JScrollPane(textArea);
+
+            JFrame descriptionFrame = new JFrame("Job Posting Details");
+            descriptionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            descriptionFrame.setSize(800, 600); 
+            descriptionFrame.setLocationRelativeTo(this);
+            descriptionFrame.add(jpScrollPane);
+            descriptionFrame.setVisible(true);
+        });
 
         bottomButtonPanel.add(deleteButton);
         bottomButtonPanel.add(updateStatusButton);
+        bottomButtonPanel.add(viewPostingButton);
 
         mainPanel.add(bottomButtonPanel, BorderLayout.SOUTH);
 
@@ -151,6 +191,34 @@ public class JobTrackingGui extends JFrame {
         revalidate();
         repaint();
     }
+
+    // private void showCachedPostings() {
+    //     JobPostingCache cache = JobPostingCache.getInstance();
+    //     StringBuilder sb = new StringBuilder();
+
+    //     if (cache.getAllPostings().isEmpty()) {
+    //         sb.append("No cached job postings.");
+    //     } else {
+    //         for (Map.Entry<String, JobPosting> entry : cache.getAllPostings().entrySet()) {
+    //             sb.append("URL: ").append(entry.getKey()).append("\n");
+    //             sb.append(entry.getValue()).append("\n\n");
+    //         }
+    //     }
+
+    //     JTextArea textArea = new JTextArea(sb.toString());
+    //     textArea.setLineWrap(true);
+    //     textArea.setWrapStyleWord(true);
+    //     textArea.setEditable(false);
+    //     JScrollPane jpScrollPane = new JScrollPane(textArea); 
+    //     JDialog dialog = new JDialog(this, "Job Posting Details", true);
+    //     dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    //     dialog.setLayout(new BorderLayout());
+    //     dialog.add(jpScrollPane, BorderLayout.CENTER);
+    //     dialog.setSize(800, 600); 
+    //     dialog.setResizable(true); 
+    //     dialog.setLocationRelativeTo(this); 
+    //     dialog.setVisible(true);
+    // }
 
     // EFFECTS: Handles selection of filter options.
     private void handleFilterSelection(JComboBox<String> filterDropdown) {
@@ -291,11 +359,52 @@ public class JobTrackingGui extends JFrame {
                 }
             }
 
+            JobPostingCache cache = JobPostingCache.getInstance();
+
+
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                url = "https://" + url;
+            }
+
+            JobPosting posting;
+            String description = JobDescriptionFetcher.fetchDescription(url);
+
+            if (description == null || description.trim().isEmpty()
+                    || description.equals("[Job description not found]")
+                    || description.equals("[Failed to fetch job description]")) {
+                JTextArea inputArea = new JTextArea(15, 50); 
+                inputArea.setLineWrap(true);
+                inputArea.setWrapStyleWord(true);
+                JScrollPane scrollPane = new JScrollPane(inputArea);
+
+                int result1 = JOptionPane.showConfirmDialog(this, scrollPane,
+                        "Could not fetch job description. Please paste it manually:",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                if (result1 == JOptionPane.OK_OPTION) {
+                    description = inputArea.getText().trim();
+                    if (description.isEmpty()) {
+                        description = "[No description available]";
+                    }
+                } else {
+                    description = "[No description available]";
+                }
+
+                if (description == null || description.trim().isEmpty()) {
+                    description = "[No description available]";
+                }
+            }
+
+            posting = new JobPosting(title, description.trim(), url);
+            cache.cachePosting(url, posting);
+
             JobApplication newJob = new JobApplication(company, title, appliedDate, resume, url);
             if (coverLetter != null) {
                 newJob.setCoverLetter(coverLetter);
             }
             newJob.setNotes(notes);
+            JobPosting postingb = JobPostingCache.getInstance().getPosting(url);
+            newJob.setJobPosting(postingb);
             jobList.addJob(newJob);
 
             refreshJobList();
@@ -304,6 +413,7 @@ public class JobTrackingGui extends JFrame {
                     "Success", JOptionPane.INFORMATION_MESSAGE);
             validInput = true;
         }
+
     }
 
     // MODIFIES: jobList
@@ -473,4 +583,9 @@ public class JobTrackingGui extends JFrame {
             dispatchEvent(new java.awt.event.WindowEvent(this, java.awt.event.WindowEvent.WINDOW_CLOSING));
         }
     }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(JobTrackingGui::new);
+    }
+
 }
