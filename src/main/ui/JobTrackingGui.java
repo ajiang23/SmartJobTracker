@@ -689,18 +689,68 @@ public class JobTrackingGui extends JFrame {
 
     // MODIFIES: jobList
     // EFFECTS: Loads job applications from a JSON file and updates the UI.
-    private void loadJobAppList() {
-        try {
-            jobList.suppressLogging(true);
-            jobList = jsonReader.read();
-            jobList.suppressLogging(false);
-            refreshJobList();
+    // private void loadJobAppList() {
+    // try {
+    // jobList.suppressLogging(true);
+    // jobList = jsonReader.read();
+    // jobList.suppressLogging(false);
+    // refreshJobList();
 
+    // JOptionPane.showMessageDialog(this, "Successfully loaded job applications!");
+    // } catch (IOException e) {
+    // e.printStackTrace();
+    // JOptionPane.showMessageDialog(this, "Error: Unable to load job
+    // applications.", "Error",
+    // JOptionPane.ERROR_MESSAGE);
+    // }
+    // }
+    private void loadJobAppList() {
+        File file = new File(getApplicationDir(), "data/jobApplication.json");
+
+        // If no file exists, start empty and write an empty JSON array
+        if (!file.exists()) {
+            jobList = new JobApplicationList();
+            try {
+                JsonWriter writer = new JsonWriter(file.getPath());
+                writer.open();
+                writer.write(jobList);
+                writer.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            refreshJobList();
+            JOptionPane.showMessageDialog(this,
+                    "No previous data found; starting fresh.",
+                    "Info", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        // File exists—attempt to read
+        try {
+            jobList = jsonReader.read();
+            refreshJobList();
             JOptionPane.showMessageDialog(this, "Successfully loaded job applications!");
         } catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error: Unable to load job applications.", "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Warning: Could not read data; starting with empty list.",
+                    "Warning", JOptionPane.WARNING_MESSAGE);
+            jobList = new JobApplicationList();
+            refreshJobList();
+        }
+
+        // File exists—attempt to read it
+        try {
+            jobList = jsonReader.read();
+            refreshJobList();
+            JOptionPane.showMessageDialog(this, "Successfully loaded job applications!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "Warning: Could not read data; starting with empty list.",
+                    "Warning", JOptionPane.WARNING_MESSAGE);
+            jobList = new JobApplicationList();
+            refreshJobList();
         }
     }
 
