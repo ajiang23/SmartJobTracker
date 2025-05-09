@@ -1,47 +1,134 @@
-# **Project Proposal - SmartJobTracker**
+# SmartJobTracker
 
-## **What does it do?**
-The **SmartJobTracker** application helps users track job applications, update their statuses, and gain insights from historical data. By streamlining the job search process, it ensures users stay organized and proactive. 
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)  
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-## **Who will use it?**
-This application is designed for **students and professionals** who need a structured and efficient way to manage their job search.  
+---
 
-## **Why does it matter?**
-Tracking job applications can be overwhelming. Many job seekers tend to rely on confirmation emails or Word/Excel documents, but these methods lack **consistency, automation, and intelligence**. 
+## 🚀 What is SmartJobTracker?
 
-**SmartJobTracker** eliminates these inefficiencies by providing a **centralized, time-sensitive, and intelligent tracking system** to help users manage their applications effectively.  
+A lightweight Java Swing application that helps students and professionals stay on top of their job search by:
 
-## **User Stories**
-- As a user, I want to be able to add a new job application to my job tracking list.  
-- As a user, I want to be able to view all job applications in a list and filter them based on specific criteria.  
-- As a user, I want to be able to update the status of a job application as my application progresses.  
-- As a user, I want to be able to delete a job application that I no longer want to track. 
-- As a user, I want to be able to save the state of the application anytime. When I select the exit option from the application menu, I want to be reminded to save my job application list to file and have the option to do so or not. 
-- As a user, I want to be able to load my job application list from file anytime. When I start the application, I want to be given the option to load my job application list from file. 
+- **Adding**, **updating**, and **deleting** job applications  
+- **Filtering** and **visualizing** your application pipeline (pie chart)  
+- **Saving** & **loading** sessions to/from JSON (`data/jobApplication.json`)  
+- **Capturing** full job postings for offline review & interview prep (cached automatically)  
 
-## **Instructions for End User**
-- You can generate the first required action related to the user story #1 "adding multiple job applications to my job tracking list" by clicking the "Add job" button at the top menu bar. A form will appear where you must fill in all the required information. Click "OK", and the newly added job application will immediately appear at the bottom of the job tracking list. 
-- You can generate the second required action related to the user story #2 "viewing all job applications in a list and filtering them based on 
-specific criteria" by clicking "Filter by: None" at the top menu bar. In the dropdown menu, select "Filter by: Company Name." A pop-up window will appear, prompting you to enter the company name you want to filter by. After entering the company name, click "OK", and the list will update to display only job applications associated with the specified company. To remove the filter and view all applications again, click "Filter by: Company Name", then select "Filter by: None" from the dropdown menu.
-- You can delete an existing job application by selecting one from the list, then choose "Delete Selected" at bottom left. 
-- You can locate my visual component which is a pie chart visualizing the percentage of job applications based on their current status by clicking "Menu" at the top left corner, then selecting "View Status Breakdown" from the dropdown menu. A new window will open displaying the pie chart. 
-- You can save the current state of the application at any time by selecting "Save Applications" from the "Menu" dropdown in the top left corner. You will also be prompted to choose to save the state of the application when exiting by choosing "Exit" from the "Menu."
-- You can reload your previously saved job applications at any time by selecting "Load Applications" from the "Menu" dropdown. You will also be prompted to choose whether to load your previously saved data when first opening the application. Please note, if you choose not to load the previous state of the application and later choose to save the state of the current session, the new data will overwrite the previous session's data, and the old data will be lost. 
+---
 
-## **Phase 4: Task 2**
+## ✨ New in v1.2: Job Posting Capture
+
+> **Capture and view the full job description** right inside the app—no more hunting through your browser history!  
+>
+> - Automatically fetches the posting when you add a new application  
+> - Caches it for **offline** access and **interview preparation**  
+> - “View Job Posting” button opens a resizable popup panel  
+
+---
+
+## 📋 User Stories
+
+1. **Add** a new job application  
+2. **View** and **filter** all applications  
+3. **Update** an application’s status  
+4. **Delete** an application  
+5. **Save** & **load** application data (JSON)  
+6. **Visualize** status breakdown via pie chart  
+7. **Fetch** and **cache** full job postings  
+
+---
+
+## 🖥️ Getting Started
+
+### 1. Clone repo
+
+```bash
+git clone https://github.com/YourUsername/SmartJobTracker.git
+cd SmartJobTracker
 ```
-Event Log:
-Fri Mar 28 21:47:27 PDT 2025 
-New job application added: specialist in abc
-Fri Mar 28 21:47:36 PDT 2025
-Updated status to: First_interview for specialist in abc
-Fri Mar 28 21:47:42 PDT 2025
-Filtered by company name: abc
-Fri Mar 28 21:47:46 PDT 2025
-Job application removed: specialist in abc
+
+### 2. Prerequisites
+- Java 11+ (Temurin/AdoptOpenJDK or Oracle)
+
+### 3. Build & Run
+If you’re not using Maven/Gradle, use the provided launcher:
+
+```bash
+# from project root
+chmod +x run.command
+./run.command
 ```
 
-## **Phase 4: Task 3**
-If I were to refactor my design, I would consider separating logic for filtering, updating, and saving job applications into dedicated service classes instead of having them tightly coupled with the UI classes. This would follow the principle of separation of concerns and improve testability.
+Otherwise, with Maven:
+```bash
+mvn clean package        # builds SmartJobTracker-1.2.0.jar in target/
+java -jar target/SmartJobTracker-1.2.0.jar
+```
 
-Additionally, the console-based and GUI-based versions of the app currently share duplicated logic (e.g., both load and save jobs, update status, etc.). A possible improvement would be to extract a shared controller layer that both UIs use, reducing redundancy and centralizing the application's core behavior.
+Or with Gradle: 
+```bash
+gradle clean shadowJar   # builds SmartJobTracker-all.jar in build/libs/
+java -jar build/libs/SmartJobTracker-all.jar
+```
+
+## 📖 Usage
+1. Add Job → click Add Job → fill form → OK
+2. View Status Breakdown → Menu → View Status Breakdown
+3. Save → Menu → Save Applications
+4. Load → Menu → Load Applications
+5. View Job Posting → select entry → View Job Posting → popup with full description
+
+## 🛠️ Packaging & Distribution
+1. Ensure your Maven/Gradle config includes FlatLaf, Jsoup, and JFreeChart dependencies.
+2. Build the “uber‑jar” with mvn package or gradle shadowJar.
+3. (Optional) Create a native installer with jpackage:
+```bash
+jpackage \
+  --input target/ \
+  --name SmartJobTracker \
+  --main-jar SmartJobTracker-1.2.0.jar \
+  --icon src/main/resources/icon.png \
+  --type dmg   # or exe, rpm, deb
+```
+4. Distribute the folder containing:
+```bash
+SmartJobTracker/
+├─ SmartJobTracker-fat.jar
+├─ run.command
+├─ data/
+│  └─ jobApplication.json  ← auto‑created if missing
+└─ README.md
+```
+
+## 🏗️ Future Roadmap
+- AI-powered Interview Prep: generate practice questions from cached postings & uploaded resume
+- Advanced Tags & Filters: multi‑criteria search (role, location, tech stack)
+- Export & Sharing: PDF/CSV export of your pipeline
+- Cross-Platform Installers: .exe, .dmg, .AppImage via jpackage
+
+## 📜 License
+```bash
+MIT License
+
+Copyright (c) 2025 Alicia Jiang
+
+Permission is hereby granted, free of charge, to any person obtaining a copy  
+of this software and associated documentation files (the “Software”), to deal  
+in the Software without restriction, including without limitation the rights  
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell  
+copies of the Software, and to permit persons to whom the Software is  
+furnished to do so, subject to the following conditions:  
+
+The above copyright notice and this permission notice shall be included in all  
+copies or substantial portions of the Software.  
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR  
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,  
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE  
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER  
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  
+SOFTWARE.
+```
+
+<sub>Built with ❤️ by Alicia Jiang</sub>

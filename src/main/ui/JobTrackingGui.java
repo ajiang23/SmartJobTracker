@@ -23,16 +23,41 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.CodeSource;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import model.JobPosting;
 import model.JobPostingCache;
 import model.JobDescriptionFetcher;
+import java.io.File;
+import java.net.URISyntaxException;
+import java.security.CodeSource;
 
 // JobTrackingGUI Application 
 public class JobTrackingGui extends JFrame {
-    private static final String JSON_STORE = "./data/jobApplication.json";
+
+    /**
+     * Returns the folder where the running JAR is located.
+     * Falls back to the current working directory if not running from a JAR.
+     */
+    private File getApplicationDir() {
+        try {
+            // Get path to the JAR file (or .class files when running in IDE)
+            CodeSource src = JobTrackingGui.class.getProtectionDomain().getCodeSource();
+            if (src != null) {
+                File jarFile = new File(src.getLocation().toURI().getPath());
+                return jarFile.getParentFile();
+            }
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        // Fallback
+        return new File(".");
+    }
+
+    // private static final String JSON_STORE = "./data/jobApplication.json";
     private JobApplicationList jobList;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
@@ -58,9 +83,21 @@ public class JobTrackingGui extends JFrame {
         setSize(900, 650);
         setLocationRelativeTo(null);
 
+        File appDir = getApplicationDir();
+        File dataDir = new File(appDir, "data");
+        // Ensure it exists
+        if (!dataDir.exists()) {
+            dataDir.mkdirs();
+        }
+
+        File jsonFile = new File(dataDir, "jobApplication.json");
+
         jobList = new JobApplicationList();
-        jsonWriter = new JsonWriter(JSON_STORE);
-        jsonReader = new JsonReader(JSON_STORE);
+        jsonWriter = new JsonWriter(jsonFile.getPath());
+
+        jsonReader = new JsonReader(jsonFile.getPath());
+        // jsonReader = new JsonReader(JSON_STORE);
+        // Determine the 'data' directory next to the JAR
 
         setupMainUI();
         setVisible(true);
@@ -661,6 +698,7 @@ public class JobTrackingGui extends JFrame {
 
             JOptionPane.showMessageDialog(this, "Successfully loaded job applications!");
         } catch (IOException e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error: Unable to load job applications.", "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -675,10 +713,16 @@ public class JobTrackingGui extends JFrame {
 
         if (saveConfirm == JOptionPane.YES_OPTION) {
             saveJobAppList();
-            dispatchEvent(new java.awt.event.WindowEvent(this, java.awt.event.WindowEvent.WINDOW_CLOSING));
-        } else if (saveConfirm == JOptionPane.NO_OPTION) {
-            dispatchEvent(new java.awt.event.WindowEvent(this, java.awt.event.WindowEvent.WINDOW_CLOSING));
         }
+        // now really close:
+        dispose();
+        System.exit(0);
+        // dispatchEvent(new java.awt.event.WindowEvent(this,
+        // java.awt.event.WindowEvent.WINDOW_CLOSING));
+        // } else if (saveConfirm == JOptionPane.NO_OPTION) {
+        // dispatchEvent(new java.awt.event.WindowEvent(this,
+        // java.awt.event.WindowEvent.WINDOW_CLOSING));
+        // }
     }
 
     public static void main(String[] args) {

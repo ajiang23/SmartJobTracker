@@ -1,1 +1,15 @@
-{"job applications": []}
+{"job applications": [{
+    "resume": "/Users/aliciajiang/XOR.png",
+    "notes": "",
+    "companyName": "aa",
+    "jobTitle": "aa",
+    "appliedDate": "2025-05-08",
+    "coverLetter": null,
+    "jobPosting": {
+        "description": "a",
+        "title": "aa",
+        "url": "https://aa"
+    },
+    "postingURL": "https://aa",
+    "status": "Applied"
+}]}
