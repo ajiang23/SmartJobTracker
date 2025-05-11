@@ -16,6 +16,8 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.PieDataset;
 import java.text.DecimalFormat;
 import java.text.AttributedString;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
@@ -80,6 +82,24 @@ public class JobTrackingGui extends JFrame {
     public JobTrackingGui() {
         super("Job Application Tracker");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int option = JOptionPane.showConfirmDialog(
+                        JobTrackingGui.this,
+                        "Do you want to save your application data before exiting?",
+                        "Confirm Exit",
+                        JOptionPane.YES_NO_CANCEL_OPTION);
+
+                if (option == JOptionPane.YES_OPTION) {
+                    saveJobAppList();
+                    System.exit(0);
+                } else if (option == JOptionPane.NO_OPTION) {
+                    System.exit(0);
+                }
+            }
+        });
+
         setSize(900, 650);
         setLocationRelativeTo(null);
 
