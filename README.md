@@ -1,134 +1,162 @@
 # SmartJobTracker
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)  
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+**SmartJobTracker** is a lightweight Java Swing application designed to help students and professionals stay organized during their job search by managing job applications.
 
 ---
 
-## 🚀 What is SmartJobTracker?
+## Project Overview
 
-A lightweight Java Swing application that helps students and professionals stay on top of their job search by:
+SmartJobTracker is an application for tracking job applications through a clean, user-friendly interface. The app allows users to:
 
-- **Adding**, **updating**, and **deleting** job applications  
-- **Filtering** and **visualizing** your application pipeline (pie chart)  
-- **Saving** & **loading** sessions to/from JSON (`data/jobApplication.json`)  
-- **Capturing** full job postings for offline review & interview prep (cached automatically)  
-
----
-
-## ✨ New in v1.2: Job Posting Capture
-
-> **Capture and view the full job description** right inside the app—no more hunting through your browser history!  
->
-> - Automatically fetches the posting when you add a new application  
-> - Caches it for **offline** access and **interview preparation**  
-> - “View Job Posting” button opens a resizable popup panel  
+- Add, update, and delete job applications.
+- Visualize job application statuses in a pie chart.
+- Save and load application data to/from JSON files.
+- Automatically fetch and cache full job postings for offline review and interview preparation.
 
 ---
 
-## 📋 User Stories
+## Key Features
 
-1. **Add** a new job application  
-2. **View** and **filter** all applications  
-3. **Update** an application’s status  
-4. **Delete** an application  
-5. **Save** & **load** application data (JSON)  
-6. **Visualize** status breakdown via pie chart  
-7. **Fetch** and **cache** full job postings  
+1. **Add New Job Application**
+   - Add details such as job title, company, status, and location.
+2. **View & Filter Applications**
+   - View applications in a list and filter them by status (e.g., Applied, Interviewing, Rejected).
+3. **Update Application Status**
+   - Update the status of a job application as it progresses through stages.
+4. **Delete Job Application**
+   - Remove an application that is no longer relevant.
+5. **Visualize Application Pipeline**
+   - View a pie chart showing the status breakdown of all job applications.
+6. **Fetch & Cache Job Postings**
+   - Automatically capture and store job descriptions for offline access.
 
 ---
 
-## 🖥️ Getting Started
+## Tech Stack & Architecture
 
-### 1. Clone repo
+- **Frontend**  
+  - **Java Swing**: Provides a responsive GUI for seamless interactions.
+  - **JFreeChart**: Used to visualize the job application pipeline in a pie chart.
+  - **Jsoup**: For parsing and extracting job posting details.
 
-```bash
-git clone https://github.com/YourUsername/SmartJobTracker.git
+- **Backend**  
+  - **Java**: Core application logic is written in Java, ensuring portability and ease of maintenance.
+
+- **Data Persistence**  
+  - **JSON**: Job application data is stored in a JSON file for easy saving and loading.
+
+---
+## Object-Oriented Programming (OOP) Principles
+
+SmartJobTracker follows core OOP principles to ensure maintainability and scalability:
+
+- **Modularity**: The application is divided into distinct classes.
+- **Single Responsibility**: Each class has a well-defined task.
+- **Encapsulation**: Internal data is hidden, with only necessary methods exposed.
+- **Inheritance & Polymorphism**: Common behaviors are inherited, and methods behave differently based on the object context.
+
+---
+
+## User Interface Options
+
+SmartJobTracker provides two interfaces, both using the same backend:
+
+- **Graphical User Interface (GUI)**: A user-friendly experience built with Java Swing.  
+  
+- **Command-Line Interface (CLI)**: A text-based interface for quick interactions.  
+
+Both interfaces ensure consistency and functionality, with the same data-handling logic.
+
+---
+
+## JSON Data Persistence
+
+The application uses JSON to store and load job application data, ensuring persistence across sessions.
+
+- **Saving**: `JsonWriter.java` handles saving data.
+- **Loading**: `JsonReader.java` reads and reconstructs the application state from the saved file.
+
+---
+
+## Unit Testing
+
+Unit tests are written using **JUnit 5** to ensure code reliability and proper functionality:
+
+- **Model Tests**: e.g., `TestJobApplication.java`, `TestJobApplicationList.java`
+- **Persistence Tests**: e.g., `JsonReaderTest.java`, `JsonWriterTest.java`
+
+Tests cover all branches and scenarios, ensuring 100% code coverage.
+
+---
+
+## Event Log
+
+An event log tracks significant actions during the session, including:
+
+- Changes to job application data
+- Additions, updates, and deletions of job postings
+
+Each entry includes a timestamp and a detailed description of the action, ensuring traceability.
+
+Example log entries:
+```
+Fri Mar 28 01:54:35 PDT 2025 - Job application for 'Software Engineer' added
+Fri Mar 28 01:55:15 PDT 2025 - Job application status changed to 'Applied'
+```
+
+
+## Getting Started Locally
+
+### Prerequisites
+- **Java 11+**: Ensure you have Java 11 or higher installed on your machine.
+  - Check the version with:
+    ```bash
+    java --version
+    ```
+- **Maven or Gradle**: The project can be built using Maven or Gradle. Make sure you have one of these installed.
+
+### 1. Clone the repository
+```
+git clone https://github.com/ajiang23/SmartJobTracker.git
 cd SmartJobTracker
 ```
 
-### 2. Prerequisites
-- Java 11+ (Temurin/AdoptOpenJDK or Oracle)
-
-### 3. Build & Run
-If you’re not using Maven/Gradle, use the provided launcher:
-
-```bash
-# from project root
+### 2. Build & Run
+Using the provided launcher:
+```
 chmod +x run.command
 ./run.command
 ```
-
-Otherwise, with Maven:
-```bash
-mvn clean package        # builds SmartJobTracker-1.2.0.jar in target/
+Alternatively, using Maven:
+```
+mvn clean package  
 java -jar target/SmartJobTracker-1.2.0.jar
 ```
-
-Or with Gradle: 
-```bash
-gradle clean shadowJar   # builds SmartJobTracker-all.jar in build/libs/
+Or with Gradle:
+```
+gradle clean shadowJar  
 java -jar build/libs/SmartJobTracker-all.jar
 ```
+---
 
-## 📖 Usage
-1. Add Job → click Add Job → fill form → OK
-2. View Status Breakdown → Menu → View Status Breakdown
-3. Save → Menu → Save Applications
-4. Load → Menu → Load Applications
-5. View Job Posting → select entry → View Job Posting → popup with full description
+## Future Roadmap
+- AI-powered Interview Prep:
+Generate practice interview questions from cached job postings and uploaded resumes.
 
-## 🛠️ Packaging & Distribution
-1. Ensure your Maven/Gradle config includes FlatLaf, Jsoup, and JFreeChart dependencies.
-2. Build the “uber‑jar” with mvn package or gradle shadowJar.
-3. (Optional) Create a native installer with jpackage:
-```bash
-jpackage \
-  --input target/ \
-  --name SmartJobTracker \
-  --main-jar SmartJobTracker-1.2.0.jar \
-  --icon src/main/resources/icon.png \
-  --type dmg   # or exe, rpm, deb
-```
-4. Distribute the folder containing:
-```bash
-SmartJobTracker/
-├─ SmartJobTracker-fat.jar
-├─ run.command
-├─ data/
-│  └─ jobApplication.json  ← auto‑created if missing
-└─ README.md
-```
+- Advanced Filters:
+Implement multi-criteria search (role, location, salary range, etc.).
 
-## 🏗️ Future Roadmap
-- AI-powered Interview Prep: generate practice questions from cached postings & uploaded resume
-- Advanced Tags & Filters: multi‑criteria search (role, location, tech stack)
-- Export & Sharing: PDF/CSV export of your pipeline
-- Cross-Platform Installers: .exe, .dmg, .AppImage via jpackage
+- Export/Share:
+Enable export of job data to PDF/CSV.
 
-## 📜 License
-```bash
-MIT License
+- Cross-Platform Installers:
+Use jpackage to build .exe, .dmg, and .AppImage installers.
 
-Copyright (c) 2025 Alicia Jiang
+---
 
-Permission is hereby granted, free of charge, to any person obtaining a copy  
-of this software and associated documentation files (the “Software”), to deal  
-in the Software without restriction, including without limitation the rights  
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell  
-copies of the Software, and to permit persons to whom the Software is  
-furnished to do so, subject to the following conditions:  
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-The above copyright notice and this permission notice shall be included in all  
-copies or substantial portions of the Software.  
+---
 
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR  
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,  
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE  
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER  
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  
-SOFTWARE.
-```
-
-<sub>Built with ❤️ by Alicia Jiang</sub>
+Built with ❤️ by Alicia Jiang
